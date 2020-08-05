@@ -21,6 +21,8 @@ type Rule struct {
 	VideoMp4SourceXpath     string
 	ImageURLXpath           string
 	PageNumberXpath         string
+	PageReg                 string
+	PageInfoURL             string
 }
 
 //GetRules 获取规则列表
@@ -45,7 +47,9 @@ func GetRules() ([]Rule, error) {
 			VideoZuidallSourceXpath: "#play_2>ul>li|&All:Text",
 			VideoMp4SourceXpath:     "#play_3>ul>li|&All:Text",
 			ImageURLXpath:           "div.vodImg>img.lazy|&Attr:src",
-			PageNumberXpath:         "div.pages|&include尾页|Attr:href",
+			PageNumberXpath:         "a.pagelink_a|&All:Attr:href",
+			PageReg:                 "vod-index-pg-(\\d+).html",
+			PageInfoURL:             "http://www.zuidazy5.com/",
 		},
 	}
 	return rules, nil

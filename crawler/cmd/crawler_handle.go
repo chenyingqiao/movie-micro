@@ -4,6 +4,7 @@ import (
 	"context"
 	"crawler/db"
 	"crawler/utils"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -12,12 +13,13 @@ import (
 
 //CrawlerLogic 爬虫逻辑
 type CrawlerLogic struct {
-	detailLock sync.WaitGroup
-	ruleParse  utils.RuleParse
-	option     utils.CrawlerOption
-	movieChan  chan db.Movie
-	ctx        *context.Context
-	IsFinished bool
+	detailLock   sync.WaitGroup
+	ruleParse    utils.RuleParse
+	option       utils.CrawlerOption
+	movieChan    chan db.Movie
+	ctx          *context.Context
+	IsFinished   bool
+	maxPageReady map[string]string
 }
 
 //HandleFunc 爬虫数据通道获取handle
@@ -26,12 +28,13 @@ type HandleFunc func(movies chan db.Movie, isFinishSign chan bool)
 //NewCrawlerLogic 创建CrawlerLogic
 func NewCrawlerLogic(ctx *context.Context, ruleParse utils.RuleParse, co utils.CrawlerOption) *CrawlerLogic {
 	crawlerLogic := &CrawlerLogic{
-		detailLock: sync.WaitGroup{},
-		ruleParse:  ruleParse,
-		option:     co,
-		movieChan:  make(chan db.Movie),
-		ctx:        ctx,
-		IsFinished: false,
+		detailLock:   sync.WaitGroup{},
+		ruleParse:    ruleParse,
+		option:       co,
+		movieChan:    make(chan db.Movie),
+		ctx:          ctx,
+		IsFinished:   false,
+		maxPageReady: make(map[string]string),
 	}
 	return crawlerLogic
 }
@@ -140,6 +143,27 @@ func (cl *CrawlerLogic) crawlerDetail(detailURL string, rule db.Rule) (db.Movie,
 	return movie, nil
 }
 
-func (cl *CrawlerLogic) getMaxPageNumber(xpath string) int {
-	return 100
+//GetMaxPageNumber 获取最大页面
+func (cl *CrawlerLogic) GetMaxPageNumber(rule db.Rule) string {
+	infoURLMd5 := utils.Md5Simple(rule.PageInfoURL)
+	if v, ok := cl.maxPageReady[infoURLMd5]; ok {
+		return v
+	}
+	doc, err := cl.ruleParse.GetDoc(rule.PageInfoURL)
+	if err != nil {
+		return "1"
+	}
+	pageURL, err := cl.ruleParse.Parse(rule.PageNumberXpath, doc)
+	re := regexp.MustCompile(rule.PageReg)
+	if len(pageURL) <= 0 {
+		return "1"
+	}
+	length := len(pageURL)
+	lastPageURL := pageURL[length-1]
+	matched := re.FindAllStringSubmatch(lastPageURL, -1)
+	for _, match := range matched {
+		cl.maxPageReady[infoURLMd5] = match[1]
+		return match[1]
+	}
+	return "1"
 }

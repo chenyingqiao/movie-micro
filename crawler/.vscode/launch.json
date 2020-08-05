@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${file}",
+            "program": "${workspaceFolder}/main.go",
             "env": {
                 "MONGODB_USERNAME":"root",
                 "MONGODB_PWD":"root",

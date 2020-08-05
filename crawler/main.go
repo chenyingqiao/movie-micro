@@ -24,6 +24,8 @@ func main() {
 		fmt.Println("未找到规则")
 	}
 	logic := cmd.NewCrawlerLogic(ctx, ruleParse, crawlerOption)
+	page := logic.GetMaxPageNumber(rules[0])
+	fmt.Println(page)
 	logic.Handle("20", rules[0], func(movies chan db.Movie, finish chan bool) {
 		for !logic.IsFinished {
 			movie, ok := <-movies

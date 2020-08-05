@@ -26,7 +26,7 @@ func main() {
 	logic := cmd.NewCrawlerLogic(ctx, ruleParse, crawlerOption)
 	page := logic.GetMaxPageNumber(rules[0])
 	fmt.Println(page)
-	logic.Handle("20", rules[0], func(movies chan db.Movie, finish chan bool) {
+	logic.Handle("1", rules[0], func(movies chan db.Movie, finish chan bool) {
 		for !logic.IsFinished {
 			movie, ok := <-movies
 			if !ok {

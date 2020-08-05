@@ -75,10 +75,16 @@ func (m *Movie) InsertWhenNotExsist() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10)*time.Second)
 	defer cancel()
 
-	filter := bson.M{"hash": m.Hash}
+	filter := bson.M{
+		"title":  m.Title,
+		"source": m.Source,
+	}
 	movie := Movie{}
 	err = col.FindOne(ctx, filter).Decode(&movie)
 	if err == nil {
+		if m.Hash == movie.Hash {
+			return nil
+		}
 		_, replaceErr := col.ReplaceOne(ctx, filter, m)
 		if replaceErr == nil {
 			return nil

@@ -161,9 +161,6 @@ func (cl *CrawlerLogic) GetMaxPageNumber(rule db.Rule) string {
 	length := len(pageURL)
 	lastPageURL := pageURL[length-1]
 	matched := re.FindAllStringSubmatch(lastPageURL, -1)
-	for _, match := range matched {
-		cl.maxPageReady[infoURLMd5] = match[1]
-		return match[1]
-	}
-	return "1"
+	cl.maxPageReady[infoURLMd5] = matched[0][1]
+	return matched[0][1]
 }

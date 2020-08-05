@@ -126,6 +126,7 @@ func (cl *CrawlerLogic) crawlerDetail(detailURL string, rule db.Rule) (db.Movie,
 		"VideoM3u8Source":    rule.VideoM3u8SourceXpath,
 		"VideoZuidallSource": rule.VideoZuidallSourceXpath,
 		"VideoMp4Source":     rule.VideoMp4SourceXpath,
+		"ImageURL":           rule.ImageURLXpath,
 	}
 	data := map[string][]string{}
 	for k, v := range fieldMap {

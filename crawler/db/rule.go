@@ -19,6 +19,7 @@ type Rule struct {
 	VideoM3u8SourceXpath    string
 	VideoZuidallSourceXpath string
 	VideoMp4SourceXpath     string
+	ImageURLXpath           string
 	PageNumberXpath         string
 }
 
@@ -43,6 +44,7 @@ func GetRules() ([]Rule, error) {
 			VideoM3u8SourceXpath:    "#play_1>ul>li|&All:Text",
 			VideoZuidallSourceXpath: "#play_2>ul>li|&All:Text",
 			VideoMp4SourceXpath:     "#play_3>ul>li|&All:Text",
+			ImageURLXpath:           "div.vodImg>img.lazy|&Attr:src",
 			PageNumberXpath:         "div.pages|&include尾页|Attr:href",
 		},
 	}

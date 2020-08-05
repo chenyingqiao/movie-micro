@@ -15,11 +15,12 @@ import (
 
 // Movie 电影数据
 type Movie struct {
+	Source             string   `bson:"source"`
 	Title              string   `bson:"title"`
 	Alias              string   `bson:"alias"`
 	Director           string   `bson:"director"`
 	Actor              string   `bson:"actor"`
-	Types              []string `bson:"types"`
+	Types              string   `bson:"types"`
 	Location           string   `bson:"location"`
 	Language           string   `bson:"language"`
 	ShowingTime        string   `bson:"showingt_ime"`
@@ -29,6 +30,7 @@ type Movie struct {
 	VideoM3u8Source    []string `bson:"video_m3u8_source"`
 	VideoZuidallSource []string `bson:"video_zuidall_source"`
 	VideoMp4Source     []string `bson:"video_map_source"`
+	ImageURL           string   `bson:"image_url"`
 	Hash               string   `bson:"hash"`
 }
 
@@ -49,6 +51,7 @@ func (m *Movie) Fill(data map[string][]string) {
 		}
 	}
 	m.Hash, _ = m.hashField()
+	m.Source = "www.zuidazy5.com"
 }
 
 func (m *Movie) hashField() (string, error) {

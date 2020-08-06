@@ -17,7 +17,11 @@
                 "MONGODB_DB":"test",
                 "MONGODB_TIMEOUT":"10",
                 "MONGODB_POOLSIZE":"30",
-            }
+            },
+            "args": [
+                "-p","1",
+                "-G","6"
+            ]
         }
     ]
 }

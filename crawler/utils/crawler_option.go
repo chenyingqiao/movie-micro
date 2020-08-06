@@ -3,7 +3,6 @@ package utils
 import (
 	"flag"
 	"fmt"
-	"os"
 	"time"
 )
 
@@ -20,10 +19,10 @@ const (
 
 // CrawlerOption 爬虫终端
 type CrawlerOption struct {
-	operator        string
-	goroutineNumber int
-	timeout         time.Duration
-	help            bool
+	batchNumber int
+	timeout     time.Duration
+	help        bool
+	pageEnd     string
 }
 
 //CrawlerHandle 回调函数
@@ -38,20 +37,15 @@ func NewCrawlerOption() CrawlerOption {
 
 // Init 初始化参数
 func (ct *CrawlerOption) Init() {
-	if len(os.Args) <= 1 {
-		ct.operator = "start"
-	} else {
-		ct.operator = os.Args[1]
-	}
-	flag.IntVar(&ct.goroutineNumber, "G", 5, "Set goroutine number")
-	flag.DurationVar(&ct.timeout, "t", 180, "Set crawler timeout")
-	flag.BoolVar(&ct.help, "h", true, "See help")
+	flag.IntVar(&ct.batchNumber, "G", 5, "Set batch number")
+	flag.BoolVar(&ct.help, "h", false, "See help")
+	flag.StringVar(&ct.pageEnd, "p", "", "End of page")
 	flag.Parse()
 }
 
 //IsNeedShowHelp 判断是否需要显示help
 func (ct *CrawlerOption) IsNeedShowHelp() bool {
-	return ct.help && ct.operator == ""
+	return ct.help
 }
 
 // PrintHelper 打印help
@@ -59,16 +53,23 @@ func (ct *CrawlerOption) PrintHelper() {
 	if !ct.help {
 		return
 	}
-	fmt.Println("crawler [start|status|stop|restart] [-hGt]")
+	fmt.Println("crawler [start|status|stop|restart] [-hGtp]")
 	flag.PrintDefaults()
 }
 
-//GetOptions 获取配置参数
-func (ct *CrawlerOption) GetOptions() map[string]interface{} {
-	return map[string]interface{}{
-		"goroutineNumber": ct.goroutineNumber,
-		"timeout":         ct.timeout,
-	}
+//GetPageNumber 获取设置的最小页面
+func (ct *CrawlerOption) GetPageNumber() string {
+	return ct.pageEnd
+}
+
+//GetBatchNumber 设置批量数量
+func (ct *CrawlerOption) GetBatchNumber() int {
+	return ct.batchNumber
+}
+
+//HasPageNumber 是否有pagenumber设置项目
+func (ct *CrawlerOption) HasPageNumber() bool {
+	return ct.pageEnd != ""
 }
 
 // Action 执行对应命令的处理

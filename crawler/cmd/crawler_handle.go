@@ -41,8 +41,7 @@ func NewCrawlerLogic(ctx *context.Context, ruleParse utils.RuleParse, co utils.C
 
 //GetOptionsDeadlineContext 获取通过配置设置的context
 func GetOptionsDeadlineContext(crawlerOption utils.CrawlerOption) (*context.Context, context.CancelFunc) {
-	options := crawlerOption.GetOptions()
-	timeout := options["timeout"].(time.Duration) * time.Second
+	timeout := 10 * time.Second
 	detailContext, cancel := context.WithDeadline(context.Background(), time.Now().Add(timeout))
 	return &detailContext, cancel
 }
@@ -72,13 +71,12 @@ func (cl *CrawlerLogic) crawler(pageNumber string, rule db.Rule) {
 	if err != nil {
 		return
 	}
-	options := cl.option.GetOptions()
 
 	batchURL := []string{}
 	batchURLList := [][]string{}
 	for i, url := range urls {
 		batchURL = append(batchURL, url)
-		if (i+1)%options["goroutineNumber"].(int) == 0 || i+1 == len(urls) {
+		if (i+1)%cl.option.GetBatchNumber() == 0 || i+1 == len(urls) {
 			batchURLList = append(batchURLList, batchURL)
 			batchURL = []string{}
 			continue

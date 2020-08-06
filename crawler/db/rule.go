@@ -28,7 +28,7 @@ type Rule struct {
 //GetRules 获取规则列表
 func GetRules() ([]Rule, error) {
 	rules := []Rule{
-		Rule{
+		{
 			ListURL:                 "http://www.zuidazy5.com/?m=vod-index-pg-{$page}.html",
 			ListXpath:               "span.xing_vb4>a|&All:Attr:href",
 			TitleXpath:              ".vodh>h2|&Text",

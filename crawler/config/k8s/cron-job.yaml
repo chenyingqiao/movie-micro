@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: crawler
 spec:
-  schedule: "22 * * * *"
+  schedule: "* * */1 * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:

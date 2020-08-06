@@ -31,7 +31,7 @@ func NewCrawlerLogic(ctx *context.Context, ruleParse utils.RuleParse, co utils.C
 		detailLock:   sync.WaitGroup{},
 		ruleParse:    ruleParse,
 		option:       co,
-		movieChan:    make(chan db.Movie),
+		movieChan:    make(chan db.Movie, 10),
 		ctx:          ctx,
 		IsFinished:   false,
 		maxPageReady: make(map[string]string),

@@ -28,7 +28,7 @@ func GetMongoDb(col string) (*mongo.Collection, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "MONGODB_TIMEOUT_NOT_INT")
 	}
-	poolSize, err := strconv.ParseUint(os.Getenv("MONGODB_POOLSIZE"), 10, 64)
+	poolSize, err := strconv.ParseUint(os.Getenv("MONGODB_POOLSIZE"), 20, 64)
 	if err != nil {
 		return nil, errors.Wrap(err, "MONGODB_POOLSIZE_NOT_INT")
 	}

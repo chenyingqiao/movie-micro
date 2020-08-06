@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-func getHtml(url_ string) string {
-	req, _ := http.NewRequest("GET", url_, nil)
+func getHTML(url string) string {
+	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3776.0 Safari/537.36")
 	client := &http.Client{Timeout: time.Second * 5}
 	resp, err := client.Do(req)

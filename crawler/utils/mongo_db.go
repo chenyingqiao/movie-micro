@@ -17,7 +17,7 @@ var (
 	mongoClient *mongo.Client
 )
 
-//GetConnect 获取mongodb的链接
+//GetMongoDb 获取mongodb的链接
 func GetMongoDb(col string) (*mongo.Collection, error) {
 	//从环境变量中获取mongodb的用户名和密码数据
 	username := os.Getenv("MONGODB_USERNAME")

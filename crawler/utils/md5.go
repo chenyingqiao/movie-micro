@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 )
 
+//Md5Simple md5
 func Md5Simple(str string) string {
 	var buf []byte
 	help := md5.New()

@@ -79,10 +79,9 @@ func (r *RuleParseQuery) final(parteRule string, selection *goquery.Selection) [
 			strings.Replace(parteRule, "All:", "", 1),
 			selection,
 		)
-	} else {
-		return []string{
-			r.finalRule(parteRule, selection),
-		}
+	}
+	return []string{
+		r.finalRule(parteRule, selection),
 	}
 }
 
@@ -111,9 +110,8 @@ func (r *RuleParseQuery) finalRule(parteRule string, selection *goquery.Selectio
 		attrStr, isExsist := selection.Attr(strings.Replace(parteRule, "Attr:", "", 1))
 		if !isExsist {
 			return ""
-		} else {
-			return attrStr
 		}
+		return attrStr
 	}
 	return ""
 }

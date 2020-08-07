@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option go_package = ".;protos";
+
+service Movie {
+    rpc Detail (MovieRequest) returns (MovieResponse) {}
+    rpc List (MovieRequest) returns (stream MovieResponse) {}
+    rpc Delete (MovieRequest) returns (MovieDeleteRequest) {}
+    rpc ReCrawler(MovieRequest) returns (MovieResponse) {}
+}
+
+message MovieResponse {
+    string source = 1;
+    string title = 2;
+    string alias = 3;
+    string director = 4;
+    string actor = 5;
+    string types = 6;
+    string location = 7;
+    string language = 8;
+    string showingTime = 9;
+    string long = 10;
+    string updateTime = 11;
+    string introduce = 12;
+    repeated string videoM3u8Source = 13;
+    repeated string videoZuidallSource = 14;
+    repeated string videoMp4Source = 15;
+    string imageURL = 16;
+    string hash = 17;
+}
+
+// movie请求
+message MovieRequest{
+    string hash = 1;
+}
+
+message MovieDeleteRequest{
+    string status = 1;
+}

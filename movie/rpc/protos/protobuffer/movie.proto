@@ -1,12 +1,33 @@
 syntax = "proto3";
+package protos;
+
+import "google/api/annotations.proto";
 
 option go_package = ".;protos";
 
 service Movie {
-    rpc Detail (MovieRequest) returns (MovieResponse) {}
-    rpc List (MovieRequest) returns (stream MovieResponse) {}
-    rpc Delete (MovieRequest) returns (MovieDeleteRequest) {}
-    rpc ReCrawler(MovieRequest) returns (MovieResponse) {}
+    rpc Detail (MovieRequest) returns (MovieResponse) {
+        option (google.api.http) = {
+            get: "/v1/movie/detail"
+        };
+    }
+    rpc List (MovieRequest) returns (stream MovieResponse) {
+        option (google.api.http) = {
+            get: "/v1/movie/list"
+        };
+    }
+    rpc Delete (MovieRequest) returns (MovieDeleteResponse) {
+        option (google.api.http) = {
+            post: "/v1/movie/delete"
+            body: "*"
+        };
+    }
+    rpc ReCrawler(MovieRequest) returns (MovieResponse) {
+        option (google.api.http) = {
+            post: "/v1/movie/re_crawler"
+            body: "*"
+        };
+    }
 }
 
 message MovieResponse {
@@ -34,6 +55,6 @@ message MovieRequest{
     string hash = 1;
 }
 
-message MovieDeleteRequest{
+message MovieDeleteResponse{
     string status = 1;
 }

@@ -20,7 +20,7 @@ func (m *MovieService) List(*protos.MovieRequest, protos.Movie_ListServer) error
 }
 
 //Delete 删除电影
-func (m *MovieService) Delete(context.Context, *protos.MovieRequest) (*protos.MovieDeleteRequest, error) {
+func (m *MovieService) Delete(context.Context, *protos.MovieRequest) (*protos.MovieDeleteResponse, error) {
 	return nil, nil
 }
 

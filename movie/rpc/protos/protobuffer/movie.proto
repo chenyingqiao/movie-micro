@@ -53,6 +53,8 @@ message MovieResponse {
 // movie请求
 message MovieRequest{
     string hash = 1;
+    string obj_id = 2;
+    int64 limit =3;
 }
 
 message MovieDeleteResponse{

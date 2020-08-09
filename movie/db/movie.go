@@ -5,35 +5,37 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
-	"movie/config"
+	"movie/rpc/protos"
 	"movie/utils"
 	"reflect"
 	"time"
 
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // Movie 电影数据
 type Movie struct {
-	Source             string   `bson:"source"`
-	Title              string   `bson:"title"`
-	Alias              string   `bson:"alias"`
-	Director           string   `bson:"director"`
-	Actor              string   `bson:"actor"`
-	Types              string   `bson:"types"`
-	Location           string   `bson:"location"`
-	Language           string   `bson:"language"`
-	ShowingTime        string   `bson:"showingt_ime"`
-	Long               string   `bson:"long"`
-	UpdateTime         string   `bson:"update_time"`
-	Introduce          string   `bson:"introduct"`
-	VideoM3u8Source    []string `bson:"video_m3u8_source"`
-	VideoZuidallSource []string `bson:"video_zuidall_source"`
-	VideoMp4Source     []string `bson:"video_map_source"`
-	ImageURL           string   `bson:"image_url"`
-	Hash               string   `bson:"hash"`
+	ID                 primitive.ObjectID `bson:"_id, omitempty"`
+	Source             string             `bson:"source"`
+	Title              string             `bson:"title"`
+	Alias              string             `bson:"alias"`
+	Director           string             `bson:"director"`
+	Actor              string             `bson:"actor"`
+	Types              string             `bson:"types"`
+	Location           string             `bson:"location"`
+	Language           string             `bson:"language"`
+	ShowingTime        string             `bson:"showingt_ime"`
+	Long               string             `bson:"long"`
+	UpdateTime         string             `bson:"update_time"`
+	Introduce          string             `bson:"introduct"`
+	VideoM3u8Source    []string           `bson:"video_m3u8_source"`
+	VideoZuidallSource []string           `bson:"video_zuidall_source"`
+	VideoMp4Source     []string           `bson:"video_map_source"`
+	ImageURL           string             `bson:"image_url"`
+	Hash               string             `bson:"hash"`
 }
 
 //NewMovie 实例化Movie
@@ -62,6 +64,30 @@ func (m *Movie) Fill(data map[string][]string) {
 	m.Source = "www.zuidazy5.com"
 }
 
+//FillObj 填充其他结构体
+func (m *Movie) FillObj(obj *protos.MovieResponse) {
+	reflectValue := reflect.ValueOf(obj)
+	movieReflectValue := reflect.ValueOf(m)
+	movieReflectType := movieReflectValue.Type()
+	for i := 0; i < movieReflectValue.NumField(); i++ {
+		movieField := movieReflectValue.Field(i)
+		k := movieReflectType.Field(i).Name
+		v := movieField.Interface()
+
+		field := reflectValue.Elem().FieldByName(k)
+		isValid := field.IsValid()
+		if !isValid {
+			continue
+		}
+		typeName := field.Type().String()
+		if isValid && typeName == "string" {
+			field.SetString(v.([]string)[0])
+		} else if isValid && typeName == "[]string" {
+			field.Set(reflect.ValueOf(v))
+		}
+	}
+}
+
 func (m *Movie) hashField() (string, error) {
 	m.Hash = ""
 	var err error
@@ -76,11 +102,11 @@ func (m *Movie) hashField() (string, error) {
 
 //InsertWhenNotExsist 进行更新或者删除
 func (m *Movie) InsertWhenNotExsist() error {
-	col, err := utils.GetMongoDb(config.MONGO_COL)
+	col, err := utils.GetMongoDb(utils.MongoCol)
 	if err != nil {
 		return errors.Wrap(err, "mongodb 错误")
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(config.MONGO_QUERY_TIMEOUT)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(utils.MongoQueryTimeout)*time.Second)
 	defer cancel()
 
 	filter := bson.M{
@@ -107,15 +133,18 @@ func (m *Movie) InsertWhenNotExsist() error {
 }
 
 //GetPageData 获取分页数据
-func (m *Movie) GetPageData(filter interface{}, sort interface{}, page int, limit int) ([]Movie, error) {
-	col, err := utils.GetMongoDb(config.MONGO_COL)
+func (m *Movie) GetPageData(filter interface{}, sort interface{}, limit int64) ([]Movie, error) {
+	col, err := utils.GetMongoDb(utils.MongoCol)
 	if err != nil {
 		return nil, errors.Wrap(err, "mongodb 错误")
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(config.MONGO_QUERY_TIMEOUT)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(utils.MongoQueryTimeout)*time.Second)
 	defer cancel()
 
-	opts := options.Find().SetSort(sort)
+	if limit == 0 {
+		limit = 60
+	}
+	opts := options.Find().SetSort(sort).SetLimit(limit)
 	cursor, err := col.Find(ctx, filter, opts)
 	movies := []Movie{}
 	for cursor.Next(context.TODO()) {
@@ -131,11 +160,11 @@ func (m *Movie) GetPageData(filter interface{}, sort interface{}, page int, limi
 
 //FindByHash 通过hash查找movie
 func (m *Movie) FindByHash(hash string) (Movie, error) {
-	col, err := utils.GetMongoDb(config.MONGO_COL)
+	col, err := utils.GetMongoDb(utils.MongoCol)
 	if err != nil {
 		return NewMovie(), errors.Wrap(err, "mongodb 错误")
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(config.MONGO_QUERY_TIMEOUT)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(utils.MongoQueryTimeout)*time.Second)
 	defer cancel()
 
 	filter := bson.M{
@@ -151,11 +180,11 @@ func (m *Movie) FindByHash(hash string) (Movie, error) {
 
 //DeleteByHash 删除对应电影数据
 func (m *Movie) DeleteByHash(hash string) (bool, error) {
-	col, err := utils.GetMongoDb(config.MONGO_COL)
+	col, err := utils.GetMongoDb(utils.MongoCol)
 	if err != nil {
 		return false, errors.Wrap(err, "mongodb 错误")
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(config.MONGO_QUERY_TIMEOUT)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(utils.MongoQueryTimeout)*time.Second)
 	defer cancel()
 
 	filter := bson.M{

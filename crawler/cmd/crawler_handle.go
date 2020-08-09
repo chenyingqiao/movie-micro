@@ -112,6 +112,7 @@ func (cl *CrawlerLogic) crawlerDetail(detailURL string, rule db.Rule) (db.Movie,
 		return movie, err
 	}
 	fieldMap := map[string]string{
+		"DetailURL":          detailURL,
 		"VideoMp4Sourc":      rule.VideoMp4SourceXpath,
 		"Title":              rule.TitleXpath,
 		"Alias":              rule.AliasXpath,

@@ -15,6 +15,10 @@ import (
 
 var (
 	mongoClient *mongo.Client
+	//MongoCol 默认文档集合
+	MongoCol = "movie"
+	//MongoQueryTimeout 查询超时
+	MongoQueryTimeout = 10
 )
 
 //GetMongoDb 获取mongodb的链接

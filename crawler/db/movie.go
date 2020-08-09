@@ -16,6 +16,7 @@ import (
 // Movie 电影数据
 type Movie struct {
 	Source             string   `bson:"source"`
+	DetailURL          string   `bson:"detail_url"`
 	Title              string   `bson:"title"`
 	Alias              string   `bson:"alias"`
 	Director           string   `bson:"director"`

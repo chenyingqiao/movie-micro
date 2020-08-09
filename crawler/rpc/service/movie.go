@@ -3,8 +3,11 @@ package service
 import (
 	"context"
 	"crawler/db"
+	"crawler/logic"
 	"crawler/rpc/protos"
+	"crawler/utils"
 
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -18,7 +21,7 @@ func (m *MovieService) Detail(ctx context.Context, movieRequest *protos.MovieReq
 	movie := db.NewMovie()
 	movieInfo, err := movie.FindByHash(movieRequest.GetHash())
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "未找到文档")
 	}
 	movieResponse := &protos.MovieResponse{}
 	movieInfo.FillObj(movieResponse)
@@ -67,6 +70,31 @@ func (m *MovieService) Delete(ctx context.Context, movieRequest *protos.MovieReq
 }
 
 //ReCrawler 重爬电影信息
-func (m *MovieService) ReCrawler(context.Context, *protos.MovieRequest) (*protos.MovieResponse, error) {
-	return nil, nil
+func (m *MovieService) ReCrawler(ctx context.Context, movieRequest *protos.MovieRequest) (*protos.MovieResponse, error) {
+	opts := utils.NewCrawlerOptionNotCmd()
+	crawlerCtx, cancel := logic.GetOptionsDeadlineContext(opts)
+	defer cancel()
+
+	//从数据库中获取文档
+	movie := db.NewMovie()
+	movieInfo, err := movie.FindByHash(movieRequest.GetHash())
+	if err != nil {
+		return nil, err
+	}
+
+	rule := db.NewRule()
+	ruleParse := utils.NewRuleParseQuery()
+	logic := logic.NewCrawlerLogic(crawlerCtx, ruleParse, opts)
+	movieRule, err := rule.GetBySource(movieInfo.Source)
+	if err != nil {
+		return nil, err
+	}
+	crawlerMovie, err := logic.CrawlerDetail(movieInfo.DetailURL, movieRule)
+	if err != nil {
+		return nil, err
+	}
+
+	movieResponse := &protos.MovieResponse{}
+	crawlerMovie.FillObj(movieResponse)
+	return movieResponse, nil
 }

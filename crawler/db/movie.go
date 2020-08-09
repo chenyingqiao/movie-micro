@@ -61,6 +61,7 @@ func (m *Movie) Fill(data map[string][]string) {
 			field.Set(reflect.ValueOf(v))
 		}
 	}
+	m.ID = primitive.NewObjectID()
 	m.Hash, _ = m.hashField()
 	m.Source = "www.zuidazy5.com"
 }
@@ -68,7 +69,7 @@ func (m *Movie) Fill(data map[string][]string) {
 //FillObj 填充其他结构体
 func (m *Movie) FillObj(obj *protos.MovieResponse) {
 	reflectValue := reflect.ValueOf(obj)
-	movieReflectValue := reflect.ValueOf(m)
+	movieReflectValue := reflect.ValueOf(*m)
 	movieReflectType := movieReflectValue.Type()
 	for i := 0; i < movieReflectValue.NumField(); i++ {
 		movieField := movieReflectValue.Field(i)
@@ -82,7 +83,7 @@ func (m *Movie) FillObj(obj *protos.MovieResponse) {
 		}
 		typeName := field.Type().String()
 		if isValid && typeName == "string" {
-			field.SetString(v.([]string)[0])
+			field.SetString(v.(string))
 		} else if isValid && typeName == "[]string" {
 			field.Set(reflect.ValueOf(v))
 		}
@@ -150,7 +151,7 @@ func (m *Movie) GetPageData(filter interface{}, sort interface{}, limit int64) (
 	movies := []Movie{}
 	for cursor.Next(context.TODO()) {
 		movie := NewMovie()
-		err := cursor.Decode(movie)
+		err := cursor.Decode(&movie)
 		if err != nil {
 			return nil, errors.Wrap(err, "Decode 错误")
 		}
@@ -172,7 +173,7 @@ func (m *Movie) FindByHash(hash string) (Movie, error) {
 		"hash": hash,
 	}
 	movie := NewMovie()
-	err = col.FindOne(ctx, filter).Decode(movie)
+	err = col.FindOne(ctx, filter).Decode(&movie)
 	if err != nil {
 		return NewMovie(), err
 	}

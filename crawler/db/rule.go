@@ -1,7 +1,10 @@
 package db
 
+import "errors"
+
 // Rule 电影信息抓取的规则
 type Rule struct {
+	Source                  string
 	ListURL                 string
 	ListXpath               string
 	TitleXpath              string
@@ -25,10 +28,16 @@ type Rule struct {
 	PageInfoURL             string
 }
 
+//NewRule 获取新的rule
+func NewRule() Rule {
+	return Rule{}
+}
+
 //GetRules 获取规则列表
 func GetRules() ([]Rule, error) {
 	rules := []Rule{
 		{
+			Source:                  "www.zuidazy5.com",
 			ListURL:                 "http://www.zuidazy5.com/?m=vod-index-pg-{$page}.html",
 			ListXpath:               "span.xing_vb4>a|&All:Attr:href",
 			TitleXpath:              ".vodh>h2|&Text",
@@ -53,6 +62,20 @@ func GetRules() ([]Rule, error) {
 		},
 	}
 	return rules, nil
+}
+
+//GetBySource 通过source获取rule
+func (rule *Rule) GetBySource(source string) (Rule, error) {
+	rules, err := GetRules()
+	if err != nil {
+		return Rule{}, err
+	}
+	for _, v := range rules {
+		if v.Source == source {
+			return v, err
+		}
+	}
+	return Rule{}, errors.New("no found rule")
 }
 
 //GetList rule

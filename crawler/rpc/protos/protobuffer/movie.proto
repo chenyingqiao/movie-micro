@@ -48,6 +48,7 @@ message MovieResponse {
     repeated string videoMp4Source = 15;
     string imageURL = 16;
     string hash = 17;
+    string DetailURL = 18;
 }
 
 // movie请求
@@ -57,6 +58,7 @@ message MovieRequest{
     int64 limit =3;
 }
 
+//删除返回信
 message MovieDeleteResponse{
     string status = 1;
 }

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"crawler/cmd"
 	"crawler/db"
+	"crawler/logic"
 	"crawler/utils"
 	"fmt"
 )
@@ -13,7 +13,7 @@ func main() {
 		crawlerOption.PrintHelper()
 		return
 	}
-	ctx, cancel := cmd.GetOptionsDeadlineContext(crawlerOption)
+	ctx, cancel := logic.GetOptionsDeadlineContext(crawlerOption)
 	ruleParse := utils.NewRuleParseQuery()
 	defer cancel()
 	rules, err := db.GetRules()
@@ -24,7 +24,7 @@ func main() {
 		fmt.Println("未找到规则")
 	}
 	for _, rule := range rules {
-		logic := cmd.NewCrawlerLogic(ctx, ruleParse, crawlerOption)
+		logic := logic.NewCrawlerLogic(ctx, ruleParse, crawlerOption)
 		page := logic.GetMaxPageNumber(rule)
 		if crawlerOption.HasPageNumber() {
 			page = crawlerOption.GetPageNumber()

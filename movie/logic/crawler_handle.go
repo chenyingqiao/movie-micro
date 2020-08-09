@@ -1,9 +1,9 @@
-package cmd
+package logic
 
 import (
 	"context"
-	"crawler/db"
-	"crawler/utils"
+	"movie/db"
+	"movie/utils"
 	"regexp"
 	"strconv"
 	"strings"

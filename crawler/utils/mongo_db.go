@@ -15,6 +15,10 @@ import (
 
 var (
 	mongoClient *mongo.Client
+	//MongoCol 默认文档集合
+	MongoCol = "movie"
+	//MongoQueryTimeout 查询超时
+	MongoQueryTimeout = 10
 )
 
 //GetMongoDb 获取mongodb的链接
@@ -56,5 +60,6 @@ func GetMongoDb(col string) (*mongo.Collection, error) {
 	if pingErr != nil {
 		panic("无法连接数据库")
 	}
+
 	return client.Database(db).Collection(col), nil
 }

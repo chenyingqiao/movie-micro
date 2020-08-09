@@ -28,6 +28,16 @@ type CrawlerOption struct {
 //CrawlerHandle 回调函数
 type CrawlerHandle func(crawlerOption *CrawlerOption) error
 
+//NewCrawlerOptionNotCmd 非名命令行环境下进行初始化
+func NewCrawlerOptionNotCmd() CrawlerOption {
+	return CrawlerOption{
+		batchNumber: 5,
+		timeout:     30,
+		help:        false,
+		pageEnd:     "1",
+	}
+}
+
 // NewCrawlerOption 获取一个Terminal提示
 func NewCrawlerOption() CrawlerOption {
 	crawlerT := CrawlerOption{}

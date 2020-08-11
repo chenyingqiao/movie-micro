@@ -192,9 +192,10 @@ func (m *Movie) DeleteByHash(hash string) (bool, error) {
 	filter := bson.M{
 		"hash": hash,
 	}
-	if result, err := col.DeleteOne(ctx, filter); err != nil && result.DeletedCount > 0 {
-		return true, nil
+	_, err = col.DeleteOne(ctx, filter)
+	if err != nil {
+		return false, nil
 	}
-	return false, nil
+	return true, nil
 
 }

@@ -18,8 +18,7 @@ service Movie {
     }
     rpc Delete (MovieRequest) returns (MovieDeleteResponse) {
         option (google.api.http) = {
-            post: "/v1/movie/delete"
-            body: "*"
+            delete: "/v1/movie"
         };
     }
     rpc ReCrawler(MovieRequest) returns (MovieResponse) {

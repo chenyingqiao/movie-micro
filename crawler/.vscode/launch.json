@@ -37,6 +37,13 @@
                 "MONGODB_TIMEOUT":"10",
                 "MONGODB_POOLSIZE":"30",
             },
+        },
+        {
+            "name": "gateway",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/gateway/server.go",
         }
     ]
 }

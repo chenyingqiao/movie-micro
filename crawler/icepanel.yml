@@ -1,0 +1,11 @@
+files:
+  - loader: k8s
+    path: config/k8s/config-map.yaml
+nodes:
+  - kind: ConfigMap
+    name: crawler
+    plugin: kubernetes-config-map
+    position:
+      x: 185
+      y: 464
+version: '1'

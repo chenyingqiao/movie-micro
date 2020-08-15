@@ -1,11 +1,11 @@
 apiVersion: v1
+data:
+  MONGODB_ADDR: '10.100.175.216:27017'
+  MONGODB_DB: test
+  MONGODB_POOLSIZE: '30'
+  MONGODB_PWD: root
+  MONGODB_TIMEOUT: '10'
+  MONGODB_USERNAME: root
 kind: ConfigMap
 metadata:
   name: crawler
-data:
-  MONGODB_USERNAME: "root"
-  MONGODB_PWD: "root"
-  MONGODB_ADDR: "10.100.175.216:27017"
-  MONGODB_DB: "test"
-  MONGODB_TIMEOUT: "10"
-  MONGODB_POOLSIZE: "30"

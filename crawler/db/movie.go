@@ -121,7 +121,7 @@ func (m *Movie) InsertWhenNotExsist() error {
 		if m.Hash == movie.Hash {
 			return nil
 		}
-		_, replaceErr := col.ReplaceOne(ctx, filter, m)
+		_, replaceErr := col.ReplaceOne(ctx, filter, movie)
 		if replaceErr == nil {
 			return nil
 		}

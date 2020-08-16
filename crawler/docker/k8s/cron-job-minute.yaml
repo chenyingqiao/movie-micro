@@ -12,7 +12,7 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: crawler
-            command: ["./bin/day_job"]
+            command: ["./bin/minute_job"]
             envFrom:
             - configMapRef:
                 name: crawler

@@ -1,0 +1,58 @@
+syntax = "proto3";
+package protos;
+
+import "google/api/annotations.proto";
+
+option go_package = ".;protos";
+
+service Auth {
+    // 获取token
+    rpc GetToken (TokenRequest) returns (TokenResponse){
+        option (google.api.http) = {
+            get: "/v1/token"
+        };
+    };
+    // 校验是否是登录状态
+    rpc Validate (ValidateRequest) returns (ValidateResponse){
+        option (google.api.http) = {
+            post: "/v1/validate"
+        };
+    };
+    // 获取用户信息
+    rpc GetInfo (GetInfoRequest) returns (GetInfoResponse){
+        option (google.api.http) = {
+            get: "/v1/info"
+        };
+    };
+}
+
+// token的数据请求
+message TokenRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message TokenResponse {
+    string token = 1;
+}
+
+// 校验接口
+message ValidateRequest{
+    string token = 1;
+    string power = 2;
+}
+
+message ValidateResponse {
+    bool status = 1;
+}
+
+// 获取用户信息
+message GetInfoRequest {
+    string token = 1;
+}
+
+message GetInfoResponse {
+    string userid = 1;
+    string username = 2;
+    repeated string power = 3;
+}

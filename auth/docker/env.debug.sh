@@ -1,0 +1,7 @@
+export MONGODB_USERNAME=root
+export MONGODB_PWD=root
+export MONGODB_ADDR=10.100.175.216:27017
+export MONGODB_DB=test
+export MONGODB_TIMEOUT=10
+export MONGODB_POOLSIZE=30
+export JWT_SING=lerko

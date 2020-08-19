@@ -66,7 +66,7 @@ func (t *Token) Parse(token string) (jwt.MapClaims, error) {
 
 //isExpired 判断是否过期
 func (t *Token) isExpired(mapClaims jwt.MapClaims) bool {
-	expireTime, err := time.ParseInLocation(jwtExpireTimeFormat, claims["expire"], time.Local)
+	expireTime, err := time.ParseInLocation(jwtExpireTimeFormat, mapClaims["expire"].(string), time.Local)
 	if err != nil {
 		return false
 	}

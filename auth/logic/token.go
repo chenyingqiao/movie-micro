@@ -1,17 +1,24 @@
 package logic
 
 import (
-	"errors"
+	"auth/errs"
 	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/pkg/errors"
 )
 
 var (
 	jwtExpireTimeFormat = "2006-01-02 15:04:05"
+
+	//ParseKeyUsername 用户名
+	ParseKeyUsername = "username"
+	//ParseKeyExpire 过期时间
+	ParseKeyExpire = "expire"
 )
 
+//Token token
 type Token struct {
 	token string
 	time  string
@@ -20,6 +27,16 @@ type Token struct {
 //NewToken 获取token
 func NewToken() Token {
 	return Token{}
+}
+
+//GetToken 获取token
+func (t *Token) GetToken() string {
+	return t.token
+}
+
+//GetTime 获取token
+func (t *Token) GetTime() string {
+	return t.time
 }
 
 //GetSignString 获取jwt加密字符串
@@ -47,7 +64,7 @@ func (t *Token) Generator(username string) (Token, error) {
 }
 
 //Parse 解析 token
-func (t *Token) Parse(token string) (jwt.MapClaims, error) {
+func (t *Token) Parse(token string) (interface{}, error) {
 	tokenEntry, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("Unexpected signing method")
@@ -57,7 +74,7 @@ func (t *Token) Parse(token string) (jwt.MapClaims, error) {
 
 	if claims, ok := tokenEntry.Claims.(jwt.MapClaims); ok && tokenEntry.Valid {
 		if t.isExpired(claims) {
-			return nil, errors.New("token已经过期")
+			return nil, errs.NewJwtExpiredError(errs.JwtExpiredCode, "tokent过期", nil)
 		}
 		return claims, nil
 	}
@@ -74,4 +91,13 @@ func (t *Token) isExpired(mapClaims jwt.MapClaims) bool {
 		return true
 	}
 	return false
+}
+
+//Validate 校验token是否有效
+func (t *Token) Validate(token string) bool {
+	_, err := t.Parse(token)
+	if err != nil {
+		return false
+	}
+	return true
 }

@@ -52,7 +52,14 @@ message GetInfoRequest {
 }
 
 message GetInfoResponse {
+    string status = 1;
+    Info info = 2;
+    int32 code = 3;
+}
+
+message Info {
     string userid = 1;
     string username = 2;
     repeated string power = 3;
+    string expire = 4;
 }

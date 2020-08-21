@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	port = ":50059"
+	port = ":50060"
 )
 
 func main() {
@@ -28,6 +28,7 @@ func Run() error {
 	}
 	server := grpc.NewServer()
 	protos.RegisterAuthServer(server, &rpc_service.AuthService{})
+	protos.RegisterUserServer(server, &rpc_service.UserService{})
 	if err := server.Serve(lis); err != nil {
 		return errors.Wrap(err, "rpc服务启动错误"+port)
 	}

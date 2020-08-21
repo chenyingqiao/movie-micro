@@ -10,6 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+//User user
 type User struct {
 	ID       primitive.ObjectID `bson:"_id, omitempty"`
 	Username string             `bson:"username"`
@@ -19,12 +20,24 @@ type User struct {
 }
 
 //NewUser 实例化新用户
-func NewUser() User {
+func NewUser(username string, password string) User {
+	return User{
+		ID:       primitive.NewObjectID(),
+		Username: username,
+		Password: password,
+		Power:    []string{},
+		Active:   true,
+	}
+}
+
+//NewEmptyUser 获取未实例化的User
+func NewEmptyUser() User {
 	return User{}
 }
 
+//Add 添加新的用户记录
 func (u *User) Add() error {
-	col, err := utils.GetMongoDb("movie")
+	col, err := utils.GetMongoDb("user")
 	if err != nil {
 		return errors.Wrap(err, "mongodb 错误")
 	}
@@ -32,14 +45,15 @@ func (u *User) Add() error {
 	defer cancel()
 
 	result, err := col.InsertOne(ctx, u)
-	if result.InsertedID != nil && err == nil {
+	if err == nil && result.InsertedID != nil {
 		return nil
 	}
 	return errors.Wrap(err, "用户插入失败")
 }
 
+//Info 获取用户信息
 func (u *User) Info(username string) (User, error) {
-	col, err := utils.GetMongoDb("movie")
+	col, err := utils.GetMongoDb("user")
 	if err != nil {
 		return User{}, errors.Wrap(err, "mongodb 错误")
 	}
@@ -49,10 +63,10 @@ func (u *User) Info(username string) (User, error) {
 	filter := bson.M{
 		"username": username,
 	}
-	user := NewUser()
+	user := NewEmptyUser()
 	userDecodeErr := col.FindOne(ctx, filter).Decode(&user)
 	if userDecodeErr != nil {
-		return NewUser(), errors.Wrap(userDecodeErr, "用户查找错误")
+		return NewEmptyUser(), errors.Wrap(userDecodeErr, "用户查找错误")
 	}
 	return user, nil
 }

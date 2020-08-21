@@ -8,7 +8,8 @@ service User {
     //Register 注册用户
     rpc Register (RegisterRequest) returns (RegisterResponse){
         option (google.api.http) = {
-            post: "/v1/register"
+            post: "/v1/register",
+            body: "*"
         };
     };
 }

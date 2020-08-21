@@ -51,7 +51,7 @@ func (t *Token) Generator(username string) (Token, error) {
 	expire := time.Now().Add(60 * 24 * 365 * time.Minute)
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": username,
-		"expire":   expire,
+		"expire":   expire.Format(jwtExpireTimeFormat),
 	}).SignedString([]byte(t.GetSignString()))
 	if err != nil {
 		return tokenEntry, err

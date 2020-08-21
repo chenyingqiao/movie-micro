@@ -13,7 +13,7 @@ import (
 
 func main() {
 	if err := run(); err != nil {
-		fmt.Println("error")
+		fmt.Println("error", err)
 	}
 }
 

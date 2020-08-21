@@ -9,19 +9,20 @@ service Auth {
     // 获取token
     rpc GetToken (TokenRequest) returns (TokenResponse){
         option (google.api.http) = {
-            get: "/v1/token"
+            get: "/v1/token/{username}"
         };
     };
     // 校验是否是登录状态
     rpc Validate (ValidateRequest) returns (ValidateResponse){
         option (google.api.http) = {
             post: "/v1/validate"
+            body:"*"
         };
     };
     // 获取用户信息
     rpc GetInfo (GetInfoRequest) returns (GetInfoResponse){
         option (google.api.http) = {
-            get: "/v1/info"
+            get: "/v1/info/{token}"
         };
     };
 }

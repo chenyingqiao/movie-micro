@@ -1,0 +1,13 @@
+<div class="movie">
+    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="">
+    <div class="cover"><span>北部丛林</span> </div>
+</div>
+
+{{range .}}
+<div class="movie">
+    <img src="{{.ImageURL}}" alt="" href="#">
+    <div class="cover"><span>{{.Title}}</span> </div>
+</div>
+{{else}}
+nothing
+{{end}}

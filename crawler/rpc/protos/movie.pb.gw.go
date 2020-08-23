@@ -95,6 +95,41 @@ func request_Movie_List_0(ctx context.Context, marshaler runtime.Marshaler, clie
 
 }
 
+func request_Movie_Search_0(ctx context.Context, marshaler runtime.Marshaler, client MovieClient, req *http.Request, pathParams map[string]string) (Movie_SearchClient, runtime.ServerMetadata, error) {
+	var protoReq MovieSearchRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["keyword"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "keyword")
+	}
+
+	protoReq.Keyword, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "keyword", err)
+	}
+
+	stream, err := client.Search(ctx, &protoReq)
+	if err != nil {
+		return nil, metadata, err
+	}
+	header, err := stream.Header()
+	if err != nil {
+		return nil, metadata, err
+	}
+	metadata.HeaderMD = header
+	return stream, metadata, nil
+
+}
+
 var (
 	filter_Movie_Delete_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
@@ -191,6 +226,13 @@ func RegisterMovieHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 	})
 
 	mux.Handle("GET", pattern_Movie_List_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		err := status.Error(codes.Unimplemented, "streaming calls are not yet supported in the in-process transport")
+		_, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+		return
+	})
+
+	mux.Handle("GET", pattern_Movie_Search_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		err := status.Error(codes.Unimplemented, "streaming calls are not yet supported in the in-process transport")
 		_, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
@@ -318,6 +360,26 @@ func RegisterMovieHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 
 	})
 
+	mux.Handle("GET", pattern_Movie_Search_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Movie_Search_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Movie_Search_0(ctx, mux, outboundMarshaler, w, req, func() (proto.Message, error) { return resp.Recv() }, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("DELETE", pattern_Movie_Delete_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -366,6 +428,8 @@ var (
 
 	pattern_Movie_List_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "movie", "list"}, "", runtime.AssumeColonVerbOpt(true)))
 
+	pattern_Movie_Search_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "movie", "search", "keyword"}, "", runtime.AssumeColonVerbOpt(true)))
+
 	pattern_Movie_Delete_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "movie"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Movie_ReCrawler_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "movie", "re_crawler"}, "", runtime.AssumeColonVerbOpt(true)))
@@ -375,6 +439,8 @@ var (
 	forward_Movie_Detail_0 = runtime.ForwardResponseMessage
 
 	forward_Movie_List_0 = runtime.ForwardResponseStream
+
+	forward_Movie_Search_0 = runtime.ForwardResponseStream
 
 	forward_Movie_Delete_0 = runtime.ForwardResponseMessage
 

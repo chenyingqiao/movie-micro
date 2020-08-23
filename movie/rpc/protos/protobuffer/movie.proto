@@ -1,0 +1,63 @@
+syntax = "proto3";
+package protos;
+
+import "google/api/annotations.proto";
+
+option go_package = ".;protos";
+
+service Movie {
+    rpc Detail (MovieRequest) returns (MovieResponse) {
+        option (google.api.http) = {
+            get: "/v1/movie/detail"
+        };
+    }
+    rpc List (MovieRequest) returns (stream MovieResponse) {
+        option (google.api.http) = {
+            get: "/v1/movie/list"
+        };
+    }
+    rpc Delete (MovieRequest) returns (MovieDeleteResponse) {
+        option (google.api.http) = {
+            delete: "/v1/movie"
+        };
+    }
+    rpc ReCrawler(MovieRequest) returns (MovieResponse) {
+        option (google.api.http) = {
+            post: "/v1/movie/re_crawler"
+            body: "*"
+        };
+    }
+}
+
+message MovieResponse {
+    string source = 1;
+    string title = 2;
+    string alias = 3;
+    string director = 4;
+    string actor = 5;
+    string types = 6;
+    string location = 7;
+    string language = 8;
+    string showingTime = 9;
+    string long = 10;
+    string updateTime = 11;
+    string introduce = 12;
+    repeated string videoM3u8Source = 13;
+    repeated string videoZuidallSource = 14;
+    repeated string videoMp4Source = 15;
+    string imageURL = 16;
+    string hash = 17;
+    string DetailURL = 18;
+}
+
+// movie请求
+message MovieRequest{
+    string hash = 1;
+    string obj_id = 2;
+    int64 limit =3;
+}
+
+//删除返回信
+message MovieDeleteResponse{
+    string status = 1;
+}

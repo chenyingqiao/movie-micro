@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+
+  <style>
+    .movie{
+        width:250px;
+        height:370px;
+        float: left;
+        margin: 5px;
+    }
+    .movie img{
+        width:250px;
+        height:370px;
+    }
+    .movie .cover {
+        width:250px;
+        height:370px;
+        line-height: 20px;
+        background-color: grey;
+        translate: 80%;
+        position:relative;
+        top: -370px;
+        background-color: rgba(255,255,255,0.5);
+        text-align: center;
+        line-height: 370px;
+        font-weight: bold;
+        user-select:none;
+        display: none;
+    }
+
+    .mao {
+        background: inherit;
+        -webkit-filter: blur(5px);
+        -moz-filter: blur(5px);
+        -ms-filter: blur(5px);
+        -o-filter: blur(5px);
+        filter: blur(5px);
+        filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=9, MakeShadow=false);
+    }
+
+    .movie-content{
+        display:flex;
+        flex-wrap:wrap;
+        align-content:flex-start;
+        align-items: center;
+        justify-content:center;
+    }
+    .search_input{
+        width:500px;
+        margin: 0px auto;
+        margin-top: 30px;
+        margin-bottom: 10px;
+    }
+  </style>
+  <body>
+
+  
+
+    <div class="container">
+        <input type="hidden" id="hid_isload" value="0">
+        <input type="hidden" id="last_id" value="0">
+        <div class="row">
+            <input type="text"
+                class="form-control search_input" name="" id="" aria-describedby="helpId" placeholder="输入要搜索的影片">
+        </div>
+        <div class="row">
+            <div class="col-xs-1-12 movie-content">
+                <div class="movie">
+                    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="" href="">
+                    <div class="cover"><span>北部丛林</span> </div>
+                </div>
+                <div class="movie">
+                    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="">
+                    <div class="cover"><span>北部丛林</span> </div>
+                </div>
+                <div class="movie">
+                    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="">
+                    <div class="cover"><span>北部丛林</span> </div>
+                </div>
+                <div class="movie">
+                    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="">
+                    <div class="cover"><span>北部丛林</span> </div>
+                </div>
+                <div class="movie">
+                    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="">
+                    <div class="cover"><span>北部丛林</span> </div>
+                </div>
+                <div class="movie">
+                    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="">
+                    <div class="cover"><span>北部丛林</span> </div>
+                </div>
+                <div class="movie">
+                    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="">
+                    <div class="cover"><span>北部丛林</span> </div>
+                </div>
+                <div class="movie">
+                    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="">
+                    <div class="cover"><span>北部丛林</span> </div>
+                </div>
+                <div class="movie">
+                    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="">
+                    <div class="cover"><span>北部丛林</span> </div>
+                </div>
+                <div class="movie">
+                    <img src="https://tu.tianzuida.com/pic/upload/vod/2020-08-15/202008151597474441.jpg" alt="">
+                    <div class="cover"><span>北部丛林</span> </div>
+                </div>
+                <a href="#" style="display:none;">next-link</a>
+            </div>
+        </div>
+    </div>
+      
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+  <script>
+      $(function(){
+            $(document).on("mouseover",".movie",function(env){
+                $(this).find(".cover").show(1500)
+            })
+            $(document).on("mouseout",".movie",function(env){
+                $(this).find(".cover").hide(1500)
+            })
+      });
+      var jlheight = 50;             //距下边界长度/单位px
+      var totalheight = 0;
+      var is_load = 0;
+      var pages = 2;
+      var n_i = 0;
+      $(window).scroll(function () {
+          var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+          totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+          is_load = $("#hid_isload").val();
+          if (is_load == 0) {
+              if (($(document).height() - jlheight) <= totalheight) {
+                  $("#hid_isload").attr("value", "1");//滚动的时候设置成1：不执行滚动
+                  console.log("加载....");
+              }
+          }
+      });
+  </script>
+</html>

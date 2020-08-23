@@ -10,6 +10,8 @@ import (
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 //MovieService 电影服务
@@ -50,6 +52,14 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 		movieListServer.Send(movieResponse)
 	}
 	return err
+}
+
+//Search 查找电影
+func (*MovieService) Search(request *protos.MovieSearchRequest, searchServer protos.Movie_SearchServer) error {
+
+	movie := db.NewMovie()
+
+	return status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 
 //Delete 删除电影

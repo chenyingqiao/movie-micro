@@ -6,4 +6,4 @@ protoc -I/usr/local/include -I.  -I/home/lerko/go/src -I/home/lerko/go/pkg/mod/g
 
 
 cd ../../../
-go-assets-builder tmpl -o ./utils/assets.go
+go-assets-builder tmpl -o ./utils/assets.go -p utils

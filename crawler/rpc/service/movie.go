@@ -33,9 +33,13 @@ func (m *MovieService) Detail(ctx context.Context, movieRequest *protos.MovieReq
 //List 电影列表
 func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer protos.Movie_ListServer) error {
 	movie := db.NewMovie()
-	objID, err := primitive.ObjectIDFromHex(movieRequest.GetObjId())
-	if err != nil {
-		return err
+	objID := primitive.NilObjectID
+	var err error
+	if movieRequest.GetObjId() != "" {
+		objID, err = primitive.ObjectIDFromHex(movieRequest.GetObjId())
+		if err != nil {
+			return err
+		}
 	}
 	filter := bson.M{
 		"_id": bson.M{
@@ -57,7 +61,7 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 //Search 查找电影
 func (*MovieService) Search(request *protos.MovieSearchRequest, searchServer protos.Movie_SearchServer) error {
 
-	movie := db.NewMovie()
+	// movie := db.NewMovie()
 
 	return status.Errorf(codes.Unimplemented, "method Search not implemented")
 }

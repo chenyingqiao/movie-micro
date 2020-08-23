@@ -25,7 +25,7 @@ func RegisterMovieController(engine *gin.Engine) {
 
 //Register 注册控制器中的方法
 func (m *MovieController) Register(engine *gin.Engine) {
-	engine.GET("/", m.hello)
+	engine.GET("/", m.index)
 	engine.GET("/detail/:hash", m.detail)
 	engine.GET("/list/:id", m.list)
 	engine.GET("/list", m.list)
@@ -34,6 +34,10 @@ func (m *MovieController) Register(engine *gin.Engine) {
 func (m *MovieController) hello(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"hello": "world"})
 	return
+}
+
+func (m *MovieController) index(c *gin.Context) {
+	c.HTML(http.StatusOK, "/tmpl/index.html", nil)
 }
 
 //detail

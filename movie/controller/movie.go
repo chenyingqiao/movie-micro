@@ -85,7 +85,7 @@ func (m *MovieController) detail(c *gin.Context) {
 		"data":    response,
 		"m3u3":    m3u8Data,
 		"zuidall": zuidallData,
-		"default": m3u8Data[len(m3u8Data)-1],
+		"default": m3u8Data[0],
 	}
 	c.HTML(http.StatusOK, "/tmpl/detail.html", htmlData)
 	return

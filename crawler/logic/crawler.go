@@ -145,10 +145,24 @@ func (cl *CrawlerLogic) crawlerDetail(detailURL string, rule db.Rule) (db.Movie,
 		if parseValue, err = cl.ruleParse.Parse(v, doc); err != nil {
 			return movie, err
 		}
+		if k == "Types" {
+			parseValue = cl.typeParse(parseValue[0])
+		}
 		data[k] = parseValue
 	}
 	movie.Fill(data)
 	return movie, nil
+}
+
+func (cl *CrawlerLogic) typeParse(types string) []string {
+	if types == "" {
+		return []string{""}
+	}
+	typesArr := strings.Split(types, " ")
+	if len(typesArr) > 0 {
+		return []string{typesArr[0]}
+	}
+	return []string{""}
 }
 
 //GetMaxPageNumber 获取最大页面

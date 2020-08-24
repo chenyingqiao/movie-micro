@@ -1,6 +1,6 @@
 {{range .data}}
 <div class="movie" href="/detail/{{.Hash}}">
-    <img src="{{.ImageURL}}" alt="" >
+    <img src="{{.ImageURL}}" alt="" onerror="this.src='http://img.chenyingqiao.top/blog/20200824202651.png'">
     <div class="cover" oid="{{.ID}}"><span>{{.Title}}</span> </div>
 </div>
 {{else}}
@@ -10,3 +10,6 @@ nothing
 {{if .last_hash}}
 <a href="/list/{{.last_hash.Hash}}"></a>
 {{end}}
+
+{_id:{$gt:ObjectId("5f43ab1d9d011376e1b36c5b")},types:{$ne:["伦理片","福利片"]}}
+{_id:{$gt:ObjectId("5f43ab1d9d011376e1b36c5b")}}

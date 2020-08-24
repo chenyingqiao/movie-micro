@@ -35,10 +35,32 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 	movie := db.NewMovie()
 	objID := primitive.NilObjectID
 	var err error
+	types := movieRequest.GetType()
 	filter := bson.M{
 		"_id": bson.M{
 			"$gt": objID,
 		},
+		"types": bson.M{
+			"$nin": bson.A{
+				"福利片",
+				"伦理片",
+			},
+		},
+	}
+	if types == "ALL" {
+		filter = bson.M{
+			"_id": bson.M{
+				"$gt": objID,
+			},
+		}
+	}
+	if types != "ALL" && types != "" {
+		filter = bson.M{
+			"_id": bson.M{
+				"$gt": objID,
+			},
+			"types": types,
+		}
 	}
 	if movieRequest.GetObjId() != "" {
 		objID, err = primitive.ObjectIDFromHex(movieRequest.GetObjId())

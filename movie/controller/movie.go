@@ -57,6 +57,9 @@ func (m *MovieController) detail(c *gin.Context) {
 	}
 	m3u8Data := []map[string]string{}
 	for _, m3u8URl := range response.VideoM3U8Source {
+		if !strings.Contains(m3u8URl, "$") {
+			continue
+		}
 		item := strings.Split(m3u8URl, "$")
 		m3u8Data = append(m3u8Data, map[string]string{
 			"title": item[0],
@@ -67,6 +70,9 @@ func (m *MovieController) detail(c *gin.Context) {
 	zuidaIsM3u8 := false
 	zuidallData := []map[string]string{}
 	for _, ZuidallURL := range response.VideoZuidallSource {
+		if !strings.Contains(ZuidallURL, "$") {
+			continue
+		}
 		item := strings.Split(ZuidallURL, "$")
 		if strings.Contains(item[1], "m3u8") {
 			zuidaIsM3u8 = true

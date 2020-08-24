@@ -27,13 +27,28 @@
             -ms-overflow-style: none; /* IE 10+ */
             overflow-x: hidden;
             overflow-y: auto;
-          }
+        }
+        .my{
+            background-color: lightseagreen;
+            text-align: right;
+        }
+        .list-group-item{
+            padding: 3px;
+        }
+        .list-group-item > span{
+            color:rgb(243, 31, 12);
+        }
+        #talk>input{
+            position:relative;
+            height: 25px;
+            width: 300px;
+        }
     </style>
   </head>
   <body>
     <div id="video-panel" style="float:left">
         <video id="live-stream" class="video-js vjs-default-skin vjs-big-play-centered"
-        controls autoplay preload="auto"
+        controls preload="auto"
         data-setup='{"example_option":true}'>
         <source src="{{.default.url}}" type="application/x-mpegURL">
         </video>
@@ -49,7 +64,11 @@
 
     <div class="tab-content"> 
         <div class="tab-pane active" id="talk">
-
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item my">  hello</li>
+                <li class="list-group-item other"><span>lerko1:</span> hello my</li>
+            </ul>
+            <input type="text" placeholder="输入并回车">
         </div>
         <div class="tab-pane" id="choose">
             <div class="list-group">
@@ -78,6 +97,12 @@
             reset($(this).attr('src'))
         });
         $(".tab-content").height(window.innerHeight-$("#my-tab").height()+"px")
+        $(".list-group-flush").height(window.innerHeight-27-$("#my-tab").height()+"px");
+        $(".list-group>button").first().addClass("active");
+        $(".list-group>button").click(function(){
+            $(".list-group>button").removeClass('active')
+            $(this).addClass('active')
+        })
     })
 
     var playerP

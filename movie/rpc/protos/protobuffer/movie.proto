@@ -62,6 +62,7 @@ message MovieRequest{
     string hash = 1;
     string obj_id = 2;
     int64 limit =3;
+    string type = 4;
 }
 
 //删除返回信

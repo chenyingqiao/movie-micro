@@ -32,7 +32,7 @@ type Movie struct {
 	Long               string             `bson:"long"`
 	UpdateTime         string             `bson:"update_time"`
 	Introduce          string             `bson:"introduct"`
-	VideoM3u8Source    []string           `bson:"video_m3u8_source"`
+	VideoM3U8Source    []string           `bson:"video_m3u8_source"`
 	VideoZuidallSource []string           `bson:"video_zuidall_source"`
 	VideoMp4Source     []string           `bson:"video_map_source"`
 	ImageURL           string             `bson:"image_url"`
@@ -83,7 +83,11 @@ func (m *Movie) FillObj(obj *protos.MovieResponse) {
 		}
 		typeName := field.Type().String()
 		if isValid && typeName == "string" {
-			field.SetString(v.(string))
+			if k == "ID" {
+				field.SetString(v.(primitive.ObjectID).Hex())
+			} else {
+				field.SetString(v.(string))
+			}
 		} else if isValid && typeName == "[]string" {
 			field.Set(reflect.ValueOf(v))
 		}

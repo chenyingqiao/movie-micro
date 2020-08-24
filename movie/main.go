@@ -20,6 +20,7 @@ func main() {
 		fmt.Println("模板文件载入失败")
 	}
 	r.SetHTMLTemplate(t)
+	loadStatic(r)
 	controller.RegisterMovieController(r)
 	r.Run(":8081")
 }
@@ -40,4 +41,8 @@ func loadTemplate() (*template.Template, error) {
 		}
 	}
 	return t, nil
+}
+
+func loadStatic(r *gin.Engine) {
+	r.Static("/video-js", "./static/video-js")
 }

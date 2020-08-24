@@ -16,6 +16,12 @@ service Movie {
             get: "/v1/movie/list"
         };
     }
+
+    rpc Search(MovieSearchRequest) returns (stream MovieResponse){
+        option (google.api.http) = {
+            get: "/v1/movie/search/{keyword}"
+        };
+    }
     rpc Delete (MovieRequest) returns (MovieDeleteResponse) {
         option (google.api.http) = {
             delete: "/v1/movie"
@@ -48,6 +54,7 @@ message MovieResponse {
     string imageURL = 16;
     string hash = 17;
     string DetailURL = 18;
+    string ID = 19;
 }
 
 // movie请求
@@ -60,4 +67,8 @@ message MovieRequest{
 //删除返回信
 message MovieDeleteResponse{
     string status = 1;
+}
+
+message MovieSearchRequest {
+    string keyword= 1;
 }

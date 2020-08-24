@@ -6,6 +6,7 @@ import (
 	"movie/rpc/protos"
 	"movie/utils"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -54,7 +55,39 @@ func (m *MovieController) detail(c *gin.Context) {
 		c.JSON(http.StatusOK, utils.JSONResult(err.Error(), nil, 200))
 		return
 	}
-	c.JSON(http.StatusOK, utils.JSONResult("success", response, 200))
+	m3u8Data := []map[string]string{}
+	for _, m3u8URl := range response.VideoM3U8Source {
+		item := strings.Split(m3u8URl, "$")
+		m3u8Data = append(m3u8Data, map[string]string{
+			"title": item[0],
+			"url":   item[1],
+		})
+	}
+
+	zuidaIsM3u8 := false
+	zuidallData := []map[string]string{}
+	for _, ZuidallURL := range response.VideoZuidallSource {
+		item := strings.Split(ZuidallURL, "$")
+		if strings.Contains(item[1], "m3u8") {
+			zuidaIsM3u8 = true
+		}
+		zuidallData = append(zuidallData, map[string]string{
+			"title": item[0],
+			"url":   item[1],
+		})
+	}
+
+	if zuidaIsM3u8 {
+		m3u8Data = zuidallData
+	}
+
+	htmlData := map[string]interface{}{
+		"data":    response,
+		"m3u3":    m3u8Data,
+		"zuidall": zuidallData,
+		"default": m3u8Data[len(m3u8Data)-1],
+	}
+	c.HTML(http.StatusOK, "/tmpl/detail.html", htmlData)
 	return
 }
 
@@ -65,9 +98,16 @@ func (m *MovieController) list(c *gin.Context) {
 	}
 
 	response, err := m.movieRPCClient.List(request)
-	if err != nil {
-		c.HTML(http.StatusInternalServerError, "/tmpl/list.html", response)
+	if err != nil || len(response) == 0 {
+		c.HTML(http.StatusInternalServerError, "/tmpl/list.html", map[string]interface{}{
+			"data":      response,
+			"last_hash": nil,
+		})
+		return
 	}
-	c.HTML(http.StatusOK, "/tmpl/list.html", response)
+	c.HTML(http.StatusOK, "/tmpl/list.html", map[string]interface{}{
+		"data":      response,
+		"last_hash": response[len(response)-1],
+	})
 	return
 }

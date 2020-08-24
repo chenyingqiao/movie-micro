@@ -35,19 +35,25 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 	movie := db.NewMovie()
 	objID := primitive.NilObjectID
 	var err error
-	if movieRequest.GetObjId() != "" {
-		objID, err = primitive.ObjectIDFromHex(movieRequest.GetObjId())
-		if err != nil {
-			return err
-		}
-	}
 	filter := bson.M{
 		"_id": bson.M{
 			"$gt": objID,
 		},
 	}
+	if movieRequest.GetObjId() != "" {
+		objID, err = primitive.ObjectIDFromHex(movieRequest.GetObjId())
+		if err != nil {
+			return err
+		}
+		filter = bson.M{
+			"_id": bson.M{
+				"$lt": objID,
+			},
+		}
+	}
+
 	sort := bson.M{
-		"_id": 1,
+		"_id": -1,
 	}
 	movies, err := movie.GetPageData(filter, sort, movieRequest.Limit)
 	for _, v := range movies {

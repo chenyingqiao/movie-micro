@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="/video-js/video-js.css" rel="stylesheet">
+    <script src="/video-js/video.js"></script>
+    <script src="/video-js/videojs-contrib-hls.min.js"></script>
+    <script>
+        videojs.options.flash.swf = "video-js/video-js.swf"
+    </script>
+    <style>
+        #choose{
+            overflow-y:auto;
+            height: 100%;
+        }
+        body::-webkit-scrollbar{
+                display: none; /* Chrome Safari */
+        }
+        body{
+            scrollbar-width: none; /* firefox */
+            -ms-overflow-style: none; /* IE 10+ */
+            overflow-x: hidden;
+            overflow-y: auto;
+          }
+    </style>
+  </head>
+  <body>
+    <div id="video-panel" style="float:left">
+        <video id="live-stream" class="video-js vjs-default-skin vjs-big-play-centered"
+        controls autoplay preload="auto"
+        data-setup='{"example_option":true}'>
+        <source src="{{.default.url}}" type="application/x-mpegURL">
+        </video>
+    </div>
+    <ul class="nav nav-tabs" id="my-tab">
+        <li class="nav-item">
+            <a href="#talk" class="nav-link active">聊天</a>
+        </li>
+        <li class="nav-item">
+            <a href="#choose" class="nav-link">选集</a>
+        </li>
+    </ul>
+
+    <div class="tab-content"> 
+        <div class="tab-pane active" id="talk">
+
+        </div>
+        <div class="tab-pane" id="choose">
+            <div class="list-group">
+                {{range .m3u3}}
+                <button type="button" class="list-group-item list-group-item-action choose-button" src="{{.url}}">{{.title}}</button>
+                {{end}}
+            </div>
+        </div>
+    </div>
+      
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+  <script>
+
+    player(window.innerWidth-300,window.innerHeight)
+    $(document).ready(function(){
+        $('#my-tab a').click(function (e) { 
+            e.preventDefault();//阻止a链接的跳转行为 
+            $(this).tab('show');//显示当前选中的链接及关联的content 
+        })
+        $(".choose-button").click(function(){
+            reset($(this).attr('src'))
+        });
+        $(".tab-content").height(window.innerHeight-$("#my-tab").height()+"px")
+    })
+
+    var playerP
+    function player(width,height){
+        console.log(arguments)
+        var options = {
+            width: width,
+            height: height
+        }
+        playerP = videojs('live-stream', options);
+    
+        playerP.on(['loadstart', 'play', 'playing', 'firstplay', 'pause', 'ended', 'adplay', 'adplaying', 'adfirstplay', 'adpause', 'adended', 'contentplay', 'contentplaying', 'contentfirstplay', 'contentpause', 'contentended', 'contentupdate'], function (e) {
+            console.warn('VIDEOJS player event: ', e.type);
+        });
+    }
+    function reset(src){
+        playerP.reset()
+        playerP.src([
+            {
+                type: 'application/x-mpegURL',
+                src: src
+            },
+        ])
+        playerP.load()
+        playerP.play()
+    }
+
+
+  </script>
+</html>

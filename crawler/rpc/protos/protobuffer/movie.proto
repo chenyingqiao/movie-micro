@@ -54,6 +54,7 @@ message MovieResponse {
     string imageURL = 16;
     string hash = 17;
     string DetailURL = 18;
+    string ID = 19;
 }
 
 // movie请求

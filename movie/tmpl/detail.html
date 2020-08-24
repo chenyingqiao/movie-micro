@@ -15,9 +15,20 @@
         videojs.options.flash.swf = "video-js/video-js.swf"
     </script>
     <style>
+        #video-panel{
+            background-color: black;
+        }
         #choose{
             overflow-y:auto;
             height: 100%;
+        }
+        #choose>img{
+            float: left;
+            height: 150px;
+        }
+        #choose>div{
+            word-break:break-all;
+            font-size: 0.7rem;
         }
         body::-webkit-scrollbar{
                 display: none; /* Chrome Safari */
@@ -43,6 +54,7 @@
             height: 25px;
             width: 300px;
         }
+        
     </style>
   </head>
   <body>
@@ -62,7 +74,7 @@
         </li>
     </ul>
 
-    <div class="tab-content"> 
+    <div class="tab-content" id="my-tab-p"> 
         <div class="tab-pane active" id="talk">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item my">  hello</li>
@@ -71,6 +83,15 @@
             <input type="text" placeholder="输入并回车">
         </div>
         <div class="tab-pane" id="choose">
+            <div>
+                <img src="{{.data.ImageURL}}" alt="" height="150px">
+                <div>
+                    <div>标题： {{.data.Title}}</div>
+                    <div>产地： {{.data.Location}}</div>
+                    <div>类型： {{.data.Types}}</div>
+                    <div>演员： {{.data.Actor}}</div>
+                </div>
+            </div>
             <div class="list-group">
                 {{range .m3u3}}
                 <button type="button" class="list-group-item list-group-item-action choose-button" src="{{.url}}">{{.title}}</button>
@@ -107,6 +128,11 @@
 
     var playerP
     function player(width,height){
+        $("#video-panel").width(width)
+        $("#video-panel").height(height)
+        $("#live-stream").width(width)
+        $("#live-stream").height(height)
+        
         console.log(arguments)
         var options = {
             width: width,

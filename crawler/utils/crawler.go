@@ -61,12 +61,13 @@ func (r *RuleParseQuery) includeRule(parteRule string, selection *goquery.Select
 	nodePosition := -1
 	if strings.HasPrefix(parteRule, "include") {
 		includeString := strings.Replace(parteRule, "include", "", 1)
-		selection.Each(func(i int, s *goquery.Selection) {
+		selection.EachWithBreak(func(i int, s *goquery.Selection) bool {
 			content := s.Text()
 			if strings.Contains(content, includeString) {
 				nodePosition = i
-				return
+				return false
 			}
+			return true
 		})
 		return nodePosition
 	}

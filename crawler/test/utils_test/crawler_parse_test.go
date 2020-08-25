@@ -19,11 +19,11 @@ func TestParseByRule(t *testing.T) {
 
 func TestParseByRuleInclude(t *testing.T) {
 	ruleParse := utils.NewRuleParseQuery()
-	doc, err := ruleParse.GetDoc("http://www.zuidazy5.com/?m=vod-detail-id-91343.html")
+	doc, err := ruleParse.GetDoc("http://www.zuidazy5.com/?m=vod-detail-id-93012.html")
 	if err != nil {
 		t.Logf("获取文档错误")
 	}
-	rule := ".vodinfobox>ul>li|&include地区|span|&Text"
+	rule := ".vodinfobox>ul>li|&include类型|span|&Text"
 	_, errParse2 := ruleParse.Parse(rule, doc)
 	if errParse2 != nil {
 		t.Errorf("失败%s", errParse2)

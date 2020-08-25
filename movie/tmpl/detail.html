@@ -23,7 +23,7 @@
             height: 100%;
         }
         #choose>img{
-            float: left;
+            margin:0px auto;
             height: 150px;
         }
         #choose>div{
@@ -67,24 +67,26 @@
     </div>
     <ul class="nav nav-tabs" id="my-tab">
         <li class="nav-item">
-            <a href="#talk" class="nav-link active">聊天</a>
+            <a href="#choose" class="nav-link active">选集</a>
         </li>
         <li class="nav-item">
-            <a href="#choose" class="nav-link">选集</a>
+            <a href="#talk" class="nav-link ">聊天</a>
         </li>
     </ul>
 
     <div class="tab-content" id="my-tab-p"> 
-        <div class="tab-pane active" id="talk">
+        <div class="tab-pane" id="talk">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item my">  hello</li>
                 <li class="list-group-item other"><span>lerko1:</span> hello my</li>
             </ul>
             <input type="text" placeholder="输入并回车">
         </div>
-        <div class="tab-pane" id="choose">
+        <div class="tab-pane active" id="choose">
             <div>
-                <img src="{{.data.ImageURL}}" alt="" height="150px">
+                <div style="display: flex;justify-content: center;align-items: center;">
+                    <img src="{{.data.ImageURL}}" alt="" width="290px">
+                </div>
                 <div>
                     <div>标题： {{.data.Title}}</div>
                     <div>产地： {{.data.Location}}</div>

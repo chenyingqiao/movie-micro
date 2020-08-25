@@ -3,6 +3,7 @@ package utils
 import (
 	"sync"
 
+	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"google.golang.org/grpc"
 )
 
@@ -20,7 +21,7 @@ func OpenGrpcClientConnect() (*grpc.ClientConn, error) {
 	wg.Add(1)
 	once.Do(func() {
 		defer wg.Done()
-		conn, err := grpc.Dial("127.0.0.1:50059", grpc.WithInsecure())
+		conn, err := grpc.Dial("127.0.0.1:50059", grpc.WithInsecure(), grpc.WithUnaryInterceptor(grpc_retry.UnaryClientInterceptor(grpc_retry.WithMax(2))))
 		if err != nil {
 			return
 		}

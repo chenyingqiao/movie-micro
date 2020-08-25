@@ -47,7 +47,7 @@ func NewCrawlerOption() CrawlerOption {
 
 // Init 初始化参数
 func (ct *CrawlerOption) Init() {
-	flag.IntVar(&ct.batchNumber, "G", 5, "Set batch number")
+	flag.IntVar(&ct.batchNumber, "G", 2, "Set per batch crawler number")
 	flag.BoolVar(&ct.help, "h", false, "See help")
 	flag.StringVar(&ct.pageEnd, "p", "", "End of page")
 	flag.Parse()

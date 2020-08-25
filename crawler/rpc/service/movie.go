@@ -67,10 +67,8 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 		if err != nil {
 			return err
 		}
-		filter = bson.M{
-			"_id": bson.M{
-				"$lt": objID,
-			},
+		filter["_id"] = bson.M{
+			"$lt": objID,
 		}
 	}
 

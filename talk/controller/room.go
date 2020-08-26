@@ -68,9 +68,12 @@ func (rc RoomController) estream(c *gin.Context) {
 	c.Stream(func(w io.Writer) bool {
 		select {
 		case <-clientGone:
+			chatGuardian.Delete(op)
 			return false
 		case message := <-*people.GetChan():
-			c.SSEvent("message", message)
+			c.SSEvent("message", utils.JSONResult("success", gin.H{
+				"message": message,
+			}, 200))
 			return true
 		}
 	})

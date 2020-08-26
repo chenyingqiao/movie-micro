@@ -8,8 +8,19 @@ import (
 
 //JSONResult json返回的标准格式
 func JSONResult(status string, data interface{}, code int) map[string]interface{} {
+	if datas, ok := data.(gin.H); ok {
+		return gin.H{
+			"message": status,
+			"data":    datas,
+			"code":    code,
+		}
+	}
 	if data == nil {
-		return map[string]interface{}{}
+		return gin.H{
+			"message": status,
+			"data":    gin.H(map[string]interface{}{}),
+			"code":    code,
+		}
 	}
 	maps := StructToMap(data)
 	return gin.H{

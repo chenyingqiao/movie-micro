@@ -31,6 +31,7 @@ type Movie struct {
 	ShowingTime        string             `bson:"showingt_ime"`
 	Long               string             `bson:"long"`
 	UpdateTime         string             `bson:"update_time"`
+	UpdateTimeUnix     int64              `bson:"update_time_unix"`
 	Introduce          string             `bson:"introduct"`
 	VideoM3U8Source    []string           `bson:"video_m3u8_source"`
 	VideoZuidallSource []string           `bson:"video_zuidall_source"`
@@ -64,6 +65,11 @@ func (m *Movie) Fill(data map[string][]string) {
 	m.ID = primitive.NewObjectID()
 	m.Hash, _ = m.hashField()
 	m.Source = "www.zuidazy5.com"
+	updatetime, err := time.Parse("2006-01-02 15:04:05", m.UpdateTime)
+	if err != nil {
+		updatetime = time.Now()
+	}
+	m.UpdateTimeUnix = updatetime.Unix()
 }
 
 //FillObj 填充其他结构体

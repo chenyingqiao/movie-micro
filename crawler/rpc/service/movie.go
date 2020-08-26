@@ -6,6 +6,7 @@ import (
 	"crawler/logic"
 	"crawler/rpc/protos"
 	"crawler/utils"
+	"time"
 
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
@@ -33,12 +34,20 @@ func (m *MovieService) Detail(ctx context.Context, movieRequest *protos.MovieReq
 //List 电影列表
 func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer protos.Movie_ListServer) error {
 	movie := db.NewMovie()
-	objID := primitive.NilObjectID
 	var err error
+	var objID primitive.ObjectID
+	if movieRequest.GetObjId() != "" {
+		objID, err = primitive.ObjectIDFromHex(movieRequest.GetObjId())
+		if err != nil {
+			objID = primitive.NewObjectIDFromTimestamp(time.Now().Add(3600 * time.Second))
+		}
+	} else {
+		objID = primitive.NewObjectIDFromTimestamp(time.Now().Add(3600 * time.Second))
+	}
 	types := movieRequest.GetType()
 	filter := bson.M{
 		"_id": bson.M{
-			"$gt": objID,
+			"$lt": objID,
 		},
 		"types": bson.M{
 			"$nin": bson.A{
@@ -50,25 +59,16 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 	if types == "ALL" {
 		filter = bson.M{
 			"_id": bson.M{
-				"$gt": objID,
+				"$lt": objID,
 			},
 		}
 	}
 	if types != "ALL" && types != "" {
 		filter = bson.M{
 			"_id": bson.M{
-				"$gt": objID,
+				"$lt": objID,
 			},
 			"types": types,
-		}
-	}
-	if movieRequest.GetObjId() != "" {
-		objID, err = primitive.ObjectIDFromHex(movieRequest.GetObjId())
-		if err != nil {
-			return err
-		}
-		filter["_id"] = bson.M{
-			"$lt": objID,
 		}
 	}
 

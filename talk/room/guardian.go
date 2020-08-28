@@ -35,33 +35,33 @@ func NewChatGuardianSingleton() *ChatGuardian {
 }
 
 //Open Open
-func (rb ChatGuardian) Join(op RoomOperator) {
+func (rb *ChatGuardian) Join(op RoomOperator) {
 	rb.openChan <- op
 }
 
 //Close Close
-func (rb ChatGuardian) Out(op RoomOperator) {
+func (rb *ChatGuardian) Out(op RoomOperator) {
 	rb.closeChan <- op
 }
 
 //Delete Delete
-func (rb ChatGuardian) Delete(op RoomOperator) {
+func (rb *ChatGuardian) Delete(op RoomOperator) {
 	rb.deleteRoom <- op
 }
 
 //Talk Talk
-func (rb ChatGuardian) Talk(message Message) {
+func (rb *ChatGuardian) Talk(message Message) {
 	rb.message <- message
 }
 
 //IsInRoom isInRoom
-func (rb ChatGuardian) IsInRoom(roomID string, people *People) bool {
+func (rb *ChatGuardian) IsInRoom(roomID string, people *People) bool {
 	room := rb.manager.Get(roomID)
 	return room.IsInRoom(people)
 }
 
 //Run Run
-func (rb ChatGuardian) Run() {
+func (rb *ChatGuardian) Run() {
 	go func() {
 		for {
 			select {
@@ -79,7 +79,7 @@ func (rb ChatGuardian) Run() {
 			case operator := <-rb.message:
 				message := operator.(Message)
 				room := rb.manager.Get(message.GetRoomId())
-				room.Talk(message.GetMessage())
+				room.Talk(message)
 			}
 		}
 	}()

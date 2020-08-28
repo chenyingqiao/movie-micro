@@ -40,7 +40,7 @@ func (u *UserCotnroller) reg(c *gin.Context) {
 		}, 500))
 		return
 	}
-	if response.Status {
+	if !response.Status {
 		c.JSON(http.StatusOK, utils.JSONResult("注册失败", gin.H{
 			"status": false,
 		}, 500))

@@ -13,14 +13,17 @@ import (
 
 type Talk struct {
 	ID         primitive.ObjectID `bson:"_id, omitempty"`
+	RoomID     string             `bson:"roomid"`
 	Username   string             `bson:"username"`
 	Content    string             `bson:"content"`
 	Createtime int64              `bson:"createtime"`
 }
 
 //NewTalk 实例化talk
-func NewTalk(username string, content string, createtime int64) Talk {
+func NewTalk(RoomID string, username string, content string, createtime int64) Talk {
 	return Talk{
+		ID:         primitive.NewObjectID(),
+		RoomID:     RoomID,
 		Username:   username,
 		Content:    content,
 		Createtime: createtime,
@@ -49,7 +52,7 @@ func (t *Talk) Add() error {
 }
 
 //GetList 获取发言列表
-func (t *Talk) GetList(filter interface{}, sort interface{}, limit int64) ([]Talk, error) {
+func (t *Talk) GetList(filter interface{}, sort interface{}, limit int64) ([]interface{}, error) {
 	col, err := utils.GetMongoDb(utils.MongoCol)
 	if err != nil {
 		return nil, errors.Wrap(err, "mongodb 错误")
@@ -61,7 +64,7 @@ func (t *Talk) GetList(filter interface{}, sort interface{}, limit int64) ([]Tal
 		limit = 300
 	}
 
-	talks := []Talk{}
+	talks := []interface{}{}
 
 	opts := options.Find().SetSort(sort).SetLimit(limit)
 	cursor, err := col.Find(ctx, filter, opts)

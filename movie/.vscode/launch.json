@@ -10,7 +10,12 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/main.go",
-            "env": {},
+            "env": {
+                "ATUH_SERVICE_HOST":"127.0.0.1",
+                "ATUH_SERVICE_PORT":"50060",
+                "MOVIE_SERVICE_HOST":"127.0.0.1",
+                "MOVIE_SERVICE_PORT":"50059",
+            },
             "args": []
         }
     ]

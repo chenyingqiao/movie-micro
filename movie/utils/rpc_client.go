@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"os"
 	"sync"
 
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
@@ -8,33 +9,39 @@ import (
 )
 
 var (
-	grpcClientConnect *grpc.ClientConn
-	once              sync.Once
+	//AuthGrpcAddress 授权服务
+	AuthGrpcAddress = "AUTH"
+	//MovieGrpcAddress 电影服务
+	MovieGrpcAddress = "MOVIE"
+
+	grpcClientConnect = map[string]*grpc.ClientConn{}
+	grpcClientMap     = map[string]string{
+		"AUTH":  os.Getenv("ATUH_SERVICE_HOST") + ":" + os.Getenv("ATUH_SERVICE_PORT"),
+		"MOVIE": os.Getenv("MOVIE_SERVICE_HOST") + ":" + os.Getenv("MOVIE_SERVICE_PORT"),
+	}
+	lock = sync.Mutex{}
 )
 
-//OpenGrpcClientConnect 获取grpc链接
-func OpenGrpcClientConnect() (*grpc.ClientConn, error) {
-	if grpcClientConnect != nil {
-		return grpcClientConnect, nil
+//OpenGrpcClientConnect 打开grpc链接，不重复开启链接
+func OpenGrpcClientConnect(flag string) (*grpc.ClientConn, error) {
+	if _, ok := grpcClientConnect[flag]; ok {
+		return grpcClientConnect[flag], nil
 	}
-	wg := sync.WaitGroup{}
-	wg.Add(1)
-	once.Do(func() {
-		defer wg.Done()
-		conn, err := grpc.Dial("127.0.0.1:50059", grpc.WithInsecure(), grpc.WithUnaryInterceptor(grpc_retry.UnaryClientInterceptor(grpc_retry.WithMax(2))))
-		if err != nil {
-			return
-		}
-		grpcClientConnect = conn
-	})
-	wg.Wait()
-	return grpcClientConnect, nil
-
+	lock.Lock()
+	defer lock.Unlock()
+	address := grpcClientMap[flag]
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithUnaryInterceptor(grpc_retry.UnaryClientInterceptor(grpc_retry.WithMax(2))))
+	if err != nil {
+		return nil, err
+	}
+	grpcClientConnect[flag] = conn
+	return conn, nil
 }
 
-//CloseGrpcClientConnect 关闭grpc
-func CloseGrpcClientConnect() {
-	if grpcClientConnect != nil {
-		grpcClientConnect.Close()
+//CloseAllGrpcClientConnect 关闭grpc
+func CloseAllGrpcClientConnect() {
+	for _, v := range grpcClientConnect {
+		v.Close()
 	}
+	grpcClientConnect = map[string]*grpc.ClientConn{}
 }

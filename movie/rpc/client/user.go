@@ -21,7 +21,7 @@ func (u *UserClient) Register(request *protos.RegisterRequest) (protos.RegisterR
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	conn, err := utils.OpenGrpcClientConnect()
+	conn, err := utils.OpenGrpcClientConnect(utils.AuthGrpcAddress)
 	if err != nil {
 		return protos.RegisterResponse{}, errs.NewGrpcError("获取grpc链接失败", err)
 	}
@@ -39,7 +39,7 @@ func (u *UserClient) GetToken(request *protos.TokenRequest) (protos.TokenRespons
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	conn, err := utils.OpenGrpcClientConnect()
+	conn, err := utils.OpenGrpcClientConnect(utils.AuthGrpcAddress)
 	if err != nil {
 		return protos.TokenResponse{}, errs.NewGrpcError("获取grpc链接失败", err)
 	}

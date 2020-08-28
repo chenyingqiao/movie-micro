@@ -1,12 +1,11 @@
 package logic
 
 import (
-	"auth/errs"
+	"errors"
 	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/pkg/errors"
 )
 
 var (
@@ -71,10 +70,13 @@ func (t *Token) Parse(token string) (interface{}, error) {
 		}
 		return []byte(t.GetSignString()), nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	if claims, ok := tokenEntry.Claims.(jwt.MapClaims); ok && tokenEntry.Valid {
 		if t.isExpired(claims) {
-			return nil, errs.NewJwtExpiredError(errs.JwtExpiredCode, "tokent过期", nil)
+			// return nil, errs.NewJwtExpiredError(errs.JwtExpiredCode, "tokent过期", nil)
 		}
 		return claims, nil
 	}

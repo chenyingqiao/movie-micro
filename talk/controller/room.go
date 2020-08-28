@@ -25,7 +25,9 @@ func (rc *RoomController) Register(engin *gin.Engine) {
 	engin.SetHTMLTemplate(rc.testTmpl())
 	engin.GET("/test/:roomid", rc.test)
 	engin.POST("/room/:roomid", middle.AuthMiddle, rc.message)
-	engin.GET("/stream/:roomid/:username", rc.estream)
+	engin.GET("/stream/:roomid", rc.estream)
+	engin.GET("/talk/:id", rc.page)
+	engin.GET("/talk", rc.page)
 }
 
 func (rc RoomController) test(c *gin.Context) {
@@ -53,12 +55,16 @@ func (rc *RoomController) message(c *gin.Context) {
 	chatGuardian := room.NewChatGuardianSingleton()
 	mesgInfo := room.NewMessage(username, roomID, message)
 	chatGuardian.Talk(mesgInfo)
+
+	//添加发言数据到数据库中
+	talkLogic := logic.NewTalkLogic()
+	talkLogic.Submit(roomID, username, message)
 	c.JSON(http.StatusOK, utils.JSONResult("success", nil, 200))
 }
 
 //EventStream 推送
 func (rc *RoomController) estream(c *gin.Context) {
-	jwt := c.GetHeader("Authorization")
+	jwt := c.Query("token")
 	roomID := c.Param("roomid")
 	authLogic := logic.NewAuthLogic()
 	userInfo, err := authLogic.GetUserInfo(jwt)
@@ -80,11 +86,12 @@ func (rc *RoomController) estream(c *gin.Context) {
 	c.Stream(func(w io.Writer) bool {
 		select {
 		case <-clientGone:
-			chatGuardian.Delete(op)
+			chatGuardian.Out(op)
 			return false
 		case message := <-*people.GetChan():
+			messageInfo := message.(room.Message)
 			c.SSEvent("message", utils.JSONResult("success", gin.H{
-				"message": message,
+				"message": fmt.Sprintf("<span>%s</span>: %s", messageInfo.GetUsername(), messageInfo.GetMessage()),
 			}, 200))
 			return true
 		}
@@ -93,7 +100,10 @@ func (rc *RoomController) estream(c *gin.Context) {
 }
 
 func (rc *RoomController) page(c *gin.Context) {
-
+	lastID := c.Params.ByName("id")
+	talkLogic := logic.NewTalkLogic()
+	talks := talkLogic.LoadPage(lastID)
+	c.JSON(http.StatusOK, utils.JSONResultArr("success", talks, 200))
 }
 
 func (rc *RoomController) testTmpl() *template.Template {

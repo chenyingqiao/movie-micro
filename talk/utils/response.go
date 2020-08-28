@@ -49,10 +49,15 @@ func StructToMap(data interface{}) map[string]interface{} {
 	refValue := reflect.ValueOf(data)
 	refType := reflect.TypeOf(data)
 	for i := 0; i < refValue.NumField(); i++ {
-		if _, isExsist := refType.Field(i).Tag.Lookup("protobuf"); !isExsist {
+		if _, isExsist := refType.Field(i).Tag.Lookup("protobuf"); isExsist {
+			m[refType.Field(i).Name] = refValue.Field(i).Interface()
 			continue
 		}
-		m[refType.Field(i).Name] = refValue.Field(i).Interface()
+		if _, isExsist := refType.Field(i).Tag.Lookup("bson"); isExsist {
+			m[refType.Field(i).Name] = refValue.Field(i).Interface()
+			continue
+		}
+		continue
 	}
 	return m
 }

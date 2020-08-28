@@ -11,8 +11,12 @@ import (
 type TalkLogic struct {
 }
 
+func NewTalkLogic() TalkLogic {
+	return TalkLogic{}
+}
+
 //LoadPage 获取分页数据
-func (t *TalkLogic) LoadPage(lastID string) []db.Talk {
+func (t *TalkLogic) LoadPage(lastID string) []interface{} {
 	talk := db.NewEmptyTalk()
 	var objID primitive.ObjectID
 	var err error
@@ -37,14 +41,14 @@ func (t *TalkLogic) LoadPage(lastID string) []db.Talk {
 
 	list, err := talk.GetList(filter, sort, 300)
 	if err != nil {
-		return []db.Talk{}
+		return []interface{}{}
 	}
 	return list
 }
 
 //Submit 添加聊天记录
-func (t *TalkLogic) Submit(username string, content string) bool {
-	talk := db.NewTalk(username, content, time.Now().Unix())
+func (t *TalkLogic) Submit(roomID string, username string, content string) bool {
+	talk := db.NewTalk(roomID, username, content, time.Now().Unix())
 	err := talk.Add()
 	if err != nil {
 		return false

@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	defer utils.CloseGrpcClientConnect()
+	defer utils.CloseAllGrpcClientConnect()
 
 	r := gin.Default()
 	t, err := loadTemplate()

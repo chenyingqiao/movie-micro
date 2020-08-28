@@ -23,7 +23,7 @@ func (a *AuthClient) GetToken(tokenRequest *protos.TokenRequest) (*protos.TokenR
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	conn, err := utils.OpenGrpcClientConnect()
+	conn, err := utils.OpenGrpcClientConnect(utils.AuthGrpcAddress)
 	if err != nil {
 		return &protos.TokenResponse{}, errs.NewGrpcError("获取grpc链接失败", err)
 	}
@@ -37,7 +37,7 @@ func (a *AuthClient) Validate(request *protos.ValidateRequest) (*protos.Validate
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	conn, err := utils.OpenGrpcClientConnect()
+	conn, err := utils.OpenGrpcClientConnect(utils.AuthGrpcAddress)
 	if err != nil {
 		return &protos.ValidateResponse{}, errs.NewGrpcError("获取grpc链接失败", err)
 	}
@@ -51,7 +51,7 @@ func (a *AuthClient) GetInfo(request *protos.GetInfoRequest) (*protos.GetInfoRes
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	conn, err := utils.OpenGrpcClientConnect()
+	conn, err := utils.OpenGrpcClientConnect(utils.AuthGrpcAddress)
 	if err != nil {
 		return &protos.GetInfoResponse{}, errs.NewGrpcError("获取grpc链接失败", err)
 	}

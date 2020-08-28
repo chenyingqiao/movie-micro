@@ -17,7 +17,11 @@
                 "MONGODB_DB":"test",
                 "MONGODB_TIMEOUT":"10",
                 "MONGODB_POOLSIZE":"30",
-                "JWT_SING":"lerko"
+                "JWT_SING":"lerko",
+                "ATUH_SERVICE_HOST":"127.0.0.1",
+                "ATUH_SERVICE_PORT":"50060",
+                "MOVIE_SERVICE_HOST":"127.0.0.1",
+                "MOVIE_SERVICE_PORT":"50059",
             },
             "args": []
         },

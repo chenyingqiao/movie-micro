@@ -50,7 +50,7 @@ func (u *User) Add() error {
 	}
 	user := NewEmptyUser()
 	userDecodeErr := col.FindOne(ctx, filter).Decode(&user)
-	if userDecodeErr == nil || !user.ID.IsZero() {
+	if userDecodeErr == nil || user.Username != "" {
 		return errs.NewDbError("用户已经存在", userDecodeErr)
 	}
 

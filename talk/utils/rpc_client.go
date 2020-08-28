@@ -6,37 +6,43 @@ import (
 
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/connectivity"
 )
 
 var (
-	grpcClientConnect *grpc.ClientConn
-	once              sync.Once
+	//AuthGrpcAddress 授权服务
+	AuthGrpcAddress = "AUTH"
+
+	grpcClientConnect = map[string]*grpc.ClientConn{}
+	grpcClientMap     = map[string]string{
+		"AUTH": os.Getenv("ATUH_SERVICE_HOST") + ":" + os.Getenv("ATUH_SERVICE_PORT"),
+	}
+	lock = sync.Mutex{}
 )
 
-//OpenGrpcClientConnect 获取grpc链接
-func OpenGrpcClientConnect() (*grpc.ClientConn, error) {
-	authGrpcAddress := os.Getenv("ATUH_SERVICE_HOST") + ":" + os.Getenv("ATUH_SERVICE_PORT")
-	if grpcClientConnect != nil {
-		return grpcClientConnect, nil
-	}
-	wg := sync.WaitGroup{}
-	wg.Add(1)
-	once.Do(func() {
-		defer wg.Done()
-		conn, err := grpc.Dial(authGrpcAddress, grpc.WithInsecure(), grpc.WithUnaryInterceptor(grpc_retry.UnaryClientInterceptor(grpc_retry.WithMax(2))))
-		if err != nil {
-			return
+//OpenGrpcClientConnect 打开grpc链接，不重复开启链接
+func OpenGrpcClientConnect(flag string) (*grpc.ClientConn, error) {
+	if _, ok := grpcClientConnect[flag]; ok {
+		conn := grpcClientConnect[flag]
+		if conn.GetState() == connectivity.Ready {
+			return grpcClientConnect[flag], nil
 		}
-		grpcClientConnect = conn
-	})
-	wg.Wait()
-	return grpcClientConnect, nil
-
+	}
+	lock.Lock()
+	defer lock.Unlock()
+	address := grpcClientMap[flag]
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithUnaryInterceptor(grpc_retry.UnaryClientInterceptor(grpc_retry.WithMax(2))))
+	if err != nil {
+		return nil, err
+	}
+	grpcClientConnect[flag] = conn
+	return conn, nil
 }
 
-//CloseGrpcClientConnect 关闭grpc
-func CloseGrpcClientConnect() {
-	if grpcClientConnect != nil {
-		grpcClientConnect.Close()
+//CloseAllGrpcClientConnect 关闭grpc
+func CloseAllGrpcClientConnect() {
+	for _, v := range grpcClientConnect {
+		v.Close()
 	}
+	grpcClientConnect = map[string]*grpc.ClientConn{}
 }

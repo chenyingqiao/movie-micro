@@ -65,7 +65,7 @@ func (r *GinRoom) Out(people *People) error {
 		return errors.New("没有广播载体")
 	}
 	r.broadcast.Unregister(*(*people).GetChan())
-	close(*(*people).GetChan())
+	// close(*(*people).GetChan())
 	delete(r.peoples, (*people).GetUsername())
 	return nil
 }

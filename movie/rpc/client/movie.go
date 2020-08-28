@@ -23,7 +23,7 @@ func (m *MovieClient) Detail(movieRequest *protos.MovieRequest) (protos.MovieRes
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	conn, err := utils.OpenGrpcClientConnect()
+	conn, err := utils.OpenGrpcClientConnect(utils.MovieGrpcAddress)
 	if err != nil {
 		return protos.MovieResponse{}, errs.NewGrpcError("获取grpc链接失败", err)
 	}
@@ -41,7 +41,7 @@ func (m *MovieClient) List(movieRequest *protos.MovieRequest) ([]interface{}, er
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	conn, err := utils.OpenGrpcClientConnect()
+	conn, err := utils.OpenGrpcClientConnect(utils.MovieGrpcAddress)
 	if err != nil {
 		return nil, errs.NewGrpcError("获取grpc链接失败", err)
 	}
@@ -71,7 +71,7 @@ func (m *MovieClient) Delete(movieRequest *protos.MovieRequest) (*protos.MovieDe
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	conn, err := utils.OpenGrpcClientConnect()
+	conn, err := utils.OpenGrpcClientConnect(utils.MovieGrpcAddress)
 	if err != nil {
 		return nil, errs.NewGrpcError("获取grpc链接失败", err)
 	}

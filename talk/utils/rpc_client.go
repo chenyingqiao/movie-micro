@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"os"
 	"sync"
 
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
@@ -14,6 +15,7 @@ var (
 
 //OpenGrpcClientConnect 获取grpc链接
 func OpenGrpcClientConnect() (*grpc.ClientConn, error) {
+	authGrpcAddress := os.Getenv("ATUH_SERVICE_HOST") + ":" + os.Getenv("ATUH_SERVICE_PORT")
 	if grpcClientConnect != nil {
 		return grpcClientConnect, nil
 	}
@@ -21,7 +23,7 @@ func OpenGrpcClientConnect() (*grpc.ClientConn, error) {
 	wg.Add(1)
 	once.Do(func() {
 		defer wg.Done()
-		conn, err := grpc.Dial("127.0.0.1:50059", grpc.WithInsecure(), grpc.WithUnaryInterceptor(grpc_retry.UnaryClientInterceptor(grpc_retry.WithMax(2))))
+		conn, err := grpc.Dial(authGrpcAddress, grpc.WithInsecure(), grpc.WithUnaryInterceptor(grpc_retry.UnaryClientInterceptor(grpc_retry.WithMax(2))))
 		if err != nil {
 			return
 		}

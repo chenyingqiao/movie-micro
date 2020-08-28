@@ -6,6 +6,7 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
+	"talk/logic"
 	"talk/middle"
 	"talk/room"
 	"talk/utils"
@@ -38,11 +39,16 @@ func (rc RoomController) test(c *gin.Context) {
 }
 
 //Message 判断是否加入房间并且发送消息
-func (rc RoomController) message(c *gin.Context) {
-	// jwt := c.GetHeader("Authorization")
+func (rc *RoomController) message(c *gin.Context) {
+	jwt := c.GetHeader("Authorization")
 	roomID := c.Param("roomid")
-	username := c.PostForm("username")
 	message := c.PostForm("message")
+	authLogic := logic.NewAuthLogic()
+	userInfo, err := authLogic.GetUserInfo(jwt)
+	if err != nil {
+		c.JSON(http.StatusOK, utils.JSONResult("用户信息获取失败", nil, 500))
+	}
+	username := userInfo.Info.Username
 
 	chatGuardian := room.NewChatGuardianSingleton()
 	mesgInfo := room.NewMessage(username, roomID, message)
@@ -51,9 +57,15 @@ func (rc RoomController) message(c *gin.Context) {
 }
 
 //EventStream 推送
-func (rc RoomController) estream(c *gin.Context) {
+func (rc *RoomController) estream(c *gin.Context) {
+	jwt := c.GetHeader("Authorization")
 	roomID := c.Param("roomid")
-	username := c.Param("username")
+	authLogic := logic.NewAuthLogic()
+	userInfo, err := authLogic.GetUserInfo(jwt)
+	if err != nil {
+		c.JSON(http.StatusOK, utils.JSONResult("用户信息获取失败", nil, 500))
+	}
+	username := userInfo.Info.Username
 
 	var people room.People
 	people = room.NewTalkPeople(username)
@@ -77,6 +89,10 @@ func (rc RoomController) estream(c *gin.Context) {
 			return true
 		}
 	})
+
+}
+
+func (rc *RoomController) page(c *gin.Context) {
 
 }
 

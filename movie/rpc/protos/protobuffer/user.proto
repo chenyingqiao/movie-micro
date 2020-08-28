@@ -1,0 +1,25 @@
+syntax = "proto3";
+package protos;
+
+import "google/api/annotations.proto";
+option go_package = ".;protos";
+
+service User {
+    //Register 注册用户
+    rpc Register (RegisterRequest) returns (RegisterResponse){
+        option (google.api.http) = {
+            post: "/v1/register",
+            body: "*"
+        };
+    };
+}
+
+message RegisterRequest {
+    string username = 1;
+    string password = 2;
+    string password_repeat = 3;
+}
+
+message RegisterResponse {
+    bool status = 1;
+}

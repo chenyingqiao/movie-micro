@@ -16,20 +16,20 @@ type MovieController struct {
 	movieRPCClient client.MovieClient
 }
 
-//RegisterMovieController 注册MovieController
-func RegisterMovieController(engine *gin.Engine) {
+//NewMovieController 注册MovieController
+func NewMovieController() *MovieController {
 	controller := MovieController{
 		movieRPCClient: client.NewMovieClient(),
 	}
-	controller.Register(engine)
+	return &controller
 }
 
 //Register 注册控制器中的方法
-func (m *MovieController) Register(engine *gin.Engine) {
-	engine.GET("/", m.index)
-	engine.GET("/detail/:hash", m.detail)
-	engine.GET("/list/:id", m.list)
-	engine.GET("/list", m.list)
+func (m *MovieController) Register(engin *gin.Engine) {
+	engin.GET("/", m.index)
+	engin.GET("/detail/:hash", m.detail)
+	engin.GET("/list/:id", m.list)
+	engin.GET("/list", m.list)
 }
 
 func (m *MovieController) hello(c *gin.Context) {

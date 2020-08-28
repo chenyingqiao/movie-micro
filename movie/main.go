@@ -21,7 +21,8 @@ func main() {
 	}
 	r.SetHTMLTemplate(t)
 	loadStatic(r)
-	controller.RegisterMovieController(r)
+	controller.RegisterController(r, controller.NewUserCotroller())
+	controller.RegisterController(r, controller.NewMovieController())
 	r.Run(":8081")
 }
 

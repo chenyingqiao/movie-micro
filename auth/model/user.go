@@ -1,6 +1,7 @@
 package model
 
 import (
+	"auth/errs"
 	"auth/utils"
 	"context"
 	"time"
@@ -39,16 +40,25 @@ func NewEmptyUser() User {
 func (u *User) Add() error {
 	col, err := utils.GetMongoDb("user")
 	if err != nil {
-		return errors.Wrap(err, "mongodb 错误")
+		return errs.NewDbError("mongodb 初始化错误", err)
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10)*time.Second)
 	defer cancel()
+
+	filter := bson.M{
+		"username": u.Username,
+	}
+	user := NewEmptyUser()
+	userDecodeErr := col.FindOne(ctx, filter).Decode(&user)
+	if userDecodeErr == nil || !user.ID.IsZero() {
+		return errs.NewDbError("用户已经存在", userDecodeErr)
+	}
 
 	result, err := col.InsertOne(ctx, u)
 	if err == nil && result.InsertedID != nil {
 		return nil
 	}
-	return errors.Wrap(err, "用户插入失败")
+	return errs.NewDbError("用户插入失败", userDecodeErr)
 }
 
 //Info 获取用户信息

@@ -61,12 +61,63 @@
         margin-top: 30px;
         margin-bottom: 10px;
     }
+
+    #side {
+        position: fixed;
+        top: 0px;
+        height: 100%;
+        width: 250px;
+        background: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .menu{
+        background: black;
+    }
+    .menu>a{
+        background: black;
+        color:white;
+        width: 250px;
+        text-align: center;
+    }
+    .menu>a:hover{
+        background: rgb(88, 88, 88);
+    }
+
+    .container-full{
+        width: 97%;
+        padding-left: 280px;
+    }
   </style>
   <body>
 
-  
+    <div id="side">
+        <div class="list-group">
+        </div>
+        <div class="list-group menu">
+            <a href="#" class="list-group-item" data="战争片">战争片</a>
+            <a href="#" class="list-group-item" data="音乐片">音乐片</a>
+            <a href="#" class="list-group-item" data="国产剧">国产剧</a>
+            <a href="#" class="list-group-item" data="韩国剧">韩国剧</a>
+            <a href="#" class="list-group-item" data="伦理片">伦理片</a>
+            <a href="#" class="list-group-item" data="记录片">记录片</a>
+            <a href="#" class="list-group-item" data="动漫片">动漫片</a>
+            <a href="#" class="list-group-item" data="日本剧">日本剧</a>
+            <a href="#" class="list-group-item" data="恐怖片">恐怖片</a>
+            <a href="#" class="list-group-item" data="台湾剧">台湾剧</a>
+            <a href="#" class="list-group-item" data="剧情片">剧情片</a>
+            <a href="#" class="list-group-item" data="动作片">动作片</a>
+            <a href="#" class="list-group-item" data="喜剧片">喜剧片</a>
+            <a href="#" class="list-group-item" data="综艺片">综艺片</a>
+            <a href="#" class="list-group-item" data="欧美剧">欧美剧</a>
+            <a href="#" class="list-group-item" data="海外剧">海外剧</a>
+            <a href="#" class="list-group-item" data="科幻片">科幻片</a>
+            <a href="#" class="list-group-item" data="香港剧">香港剧</a>
+        </div>
+    </div>
 
-    <div class="container">
+    <div class="container-full">
         <input type="hidden" id="hid_isload" value="0">
         <input type="hidden" id="last_id" value="0">
         <div class="row">
@@ -98,6 +149,12 @@
             $(document).on("click",".movie",function(){
                 window.open($(this).attr("href"), '_blank').location;
             })
+            $(".menu>a").click(function(){
+                $("div.movie-content").children().remove()
+                $(".menu>a").removeClass("active")
+                $(this).addClass("active")
+                load()
+            })
       });
       var jlheight = 50;             //距下边界长度/单位px
       var totalheight = 0;
@@ -118,11 +175,16 @@
       });
 
       function load(){
+          url = "/list/"
           lastOid = $(".movie>div.cover").last().attr("oid")
-          if(lastOid == undefined) {
-              lastOid = ""
+          if(lastOid != undefined) {
+              url+=lastOid
           }
-          $.get("/list/"+lastOid,function(content,status){
+          type = $(".menu>a[class='list-group-item active']").attr("data")
+          if(type != undefined){
+              url+="?type="+type
+          }
+          $.get(url,function(content,status){
               if (status != "success") {
                   return 
               }

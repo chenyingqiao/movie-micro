@@ -243,9 +243,9 @@
 
     function loadComment(){
         if($("#lastID").attr('data') == ""){
-            url = "http://localhost:8084/talk"
+            url = "http://localhost:8084/talk/{{.data.Hash}}"
         }else{
-            url = "http://localhost:8084/talk/"+$("#lastID").attr('data')
+            url = "http://localhost:8084/talk/{{.data.Hash}}/"+$("#lastID").attr('data')
         }
         $.get(url,function(data){
             append = ""

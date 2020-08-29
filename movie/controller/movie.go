@@ -99,8 +99,10 @@ func (m *MovieController) detail(c *gin.Context) {
 
 func (m *MovieController) list(c *gin.Context) {
 	objID := c.Params.ByName("id")
+	types := c.Query("type")
 	request := &protos.MovieRequest{
 		ObjId: objID,
+		Type:  types,
 	}
 
 	response, err := m.movieRPCClient.List(request)

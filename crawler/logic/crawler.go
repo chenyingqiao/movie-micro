@@ -55,7 +55,7 @@ func (cl *CrawlerLogic) Handle(page string, rule db.Rule, handle HandleFunc) {
 	}
 	isFinish := make(chan bool)
 	go handle(cl.movieChan, isFinish)
-	for i := 1; i <= pageNumber; i++ {
+	for i := pageNumber; i >= 1; i-- {
 		cl.crawler(strconv.Itoa(i), rule)
 		cl.detailLock.Wait() //等上一页都采集完成
 	}

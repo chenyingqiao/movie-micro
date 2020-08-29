@@ -26,8 +26,8 @@ func (rc *RoomController) Register(engin *gin.Engine) {
 	engin.GET("/test/:roomid", rc.test)
 	engin.POST("/room/:roomid", middle.AuthMiddle, rc.message)
 	engin.GET("/stream/:roomid", rc.estream)
-	engin.GET("/talk/:id", rc.page)
-	engin.GET("/talk", rc.page)
+	engin.GET("/talk/:roomid/:id", rc.page)
+	engin.GET("/talk/:roomid", rc.page)
 }
 
 func (rc RoomController) test(c *gin.Context) {
@@ -101,8 +101,9 @@ func (rc *RoomController) estream(c *gin.Context) {
 
 func (rc *RoomController) page(c *gin.Context) {
 	lastID := c.Params.ByName("id")
+	roomID := c.Params.ByName("roomid")
 	talkLogic := logic.NewTalkLogic()
-	talks := talkLogic.LoadPage(lastID)
+	talks := talkLogic.LoadPage(lastID, roomID)
 	c.JSON(http.StatusOK, utils.JSONResultArr("success", talks, 200))
 }
 

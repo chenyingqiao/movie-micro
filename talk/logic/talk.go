@@ -16,7 +16,7 @@ func NewTalkLogic() TalkLogic {
 }
 
 //LoadPage 获取分页数据
-func (t *TalkLogic) LoadPage(lastID string) []interface{} {
+func (t *TalkLogic) LoadPage(lastID string, roomID string) []interface{} {
 	talk := db.NewEmptyTalk()
 	var objID primitive.ObjectID
 	var err error
@@ -33,6 +33,7 @@ func (t *TalkLogic) LoadPage(lastID string) []interface{} {
 		"_id": bson.M{
 			"$lt": objID,
 		},
+		"roomid": roomID,
 	}
 
 	sort := bson.M{

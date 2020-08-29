@@ -49,12 +49,12 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 		"_id": bson.M{
 			"$lt": objID,
 		},
-		"types": bson.M{
-			"$nin": bson.A{
-				"福利片",
-				"伦理片",
-			},
-		},
+		// "types": bson.M{
+		// 	"$nin": bson.A{
+		// 		"福利片",
+		// 		"伦理片",
+		// 	},
+		// },
 	}
 	if types == "ALL" {
 		filter = bson.M{

@@ -95,6 +95,10 @@ func request_Movie_List_0(ctx context.Context, marshaler runtime.Marshaler, clie
 
 }
 
+var (
+	filter_Movie_Search_0 = &utilities.DoubleArray{Encoding: map[string]int{"keyword": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+)
+
 func request_Movie_Search_0(ctx context.Context, marshaler runtime.Marshaler, client MovieClient, req *http.Request, pathParams map[string]string) (Movie_SearchClient, runtime.ServerMetadata, error) {
 	var protoReq MovieSearchRequest
 	var metadata runtime.ServerMetadata
@@ -115,6 +119,13 @@ func request_Movie_Search_0(ctx context.Context, marshaler runtime.Marshaler, cl
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "keyword", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Movie_Search_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	stream, err := client.Search(ctx, &protoReq)

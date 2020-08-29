@@ -83,3 +83,33 @@ func (m *MovieClient) Delete(movieRequest *protos.MovieRequest) (*protos.MovieDe
 	}
 	return movieResponse, nil
 }
+
+//Search 查找
+func (m *MovieClient) Search(request *protos.MovieSearchRequest) ([]interface{}, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	conn, err := utils.OpenGrpcClientConnect(utils.MovieGrpcAddress)
+	if err != nil {
+		return nil, errs.NewGrpcError("获取grpc链接失败", err)
+	}
+
+	client := protos.NewMovieClient(conn)
+	stream, err := client.Search(ctx, request)
+	if err != nil {
+		return nil, errs.NewGrpcError("grpc:Movie 搜索失败", err)
+	}
+	responses := []interface{}{}
+	var item *protos.MovieResponse
+	for {
+		item, err = stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil && err != io.EOF {
+			return nil, err
+		}
+		responses = append(responses, item)
+	}
+	return responses, nil
+}

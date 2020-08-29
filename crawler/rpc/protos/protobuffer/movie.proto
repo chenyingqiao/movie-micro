@@ -72,4 +72,5 @@ message MovieDeleteResponse{
 
 message MovieSearchRequest {
     string keyword= 1;
+    string obj_id = 2;
 }

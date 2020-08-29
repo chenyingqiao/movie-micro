@@ -100,12 +100,24 @@ func (m *MovieController) detail(c *gin.Context) {
 func (m *MovieController) list(c *gin.Context) {
 	objID := c.Params.ByName("id")
 	types := c.Query("type")
-	request := &protos.MovieRequest{
-		ObjId: objID,
-		Type:  types,
+	keyword := c.Query("keyword")
+
+	var response []interface{}
+	var err error
+	if keyword != "" {
+		request := &protos.MovieSearchRequest{
+			Keyword: keyword,
+			ObjId:   objID,
+		}
+		response, err = m.movieRPCClient.Search(request)
+	} else {
+		request := &protos.MovieRequest{
+			ObjId: objID,
+			Type:  types,
+		}
+		response, err = m.movieRPCClient.List(request)
 	}
 
-	response, err := m.movieRPCClient.List(request)
 	if err != nil || len(response) == 0 {
 		c.HTML(http.StatusInternalServerError, "/tmpl/list.html", map[string]interface{}{
 			"data":      response,

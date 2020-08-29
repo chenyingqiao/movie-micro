@@ -96,11 +96,11 @@
         <div class="list-group">
         </div>
         <div class="list-group menu">
+            <a href="#" class="list-group-item" data="">全部</a>
             <a href="#" class="list-group-item" data="战争片">战争片</a>
             <a href="#" class="list-group-item" data="音乐片">音乐片</a>
             <a href="#" class="list-group-item" data="国产剧">国产剧</a>
             <a href="#" class="list-group-item" data="韩国剧">韩国剧</a>
-            <a href="#" class="list-group-item" data="伦理片">伦理片</a>
             <a href="#" class="list-group-item" data="记录片">记录片</a>
             <a href="#" class="list-group-item" data="动漫片">动漫片</a>
             <a href="#" class="list-group-item" data="日本剧">日本剧</a>
@@ -122,7 +122,7 @@
         <input type="hidden" id="last_id" value="0">
         <div class="row">
             <input type="text"
-                class="form-control search_input" name="" id="" aria-describedby="helpId" placeholder="输入要搜索的影片">
+                class="form-control search_input" name="" id="search" aria-describedby="helpId" placeholder="输入要搜索的影片">
         </div>
         <div class="row">
             <div class="col-xs-1-12 movie-content">
@@ -151,9 +151,18 @@
             })
             $(".menu>a").click(function(){
                 $("div.movie-content").children().remove()
+                $("#search").val("")
                 $(".menu>a").removeClass("active")
                 $(this).addClass("active")
                 load()
+            })
+            $('#search').bind('keypress',function(event){
+                if(event.keyCode == "13")    
+                {
+                    $("div.movie-content").children().remove()
+                    console.log($("#search").val())
+                    load()
+                }
             })
       });
       var jlheight = 50;             //距下边界长度/单位px
@@ -175,23 +184,27 @@
       });
 
       function load(){
-          url = "/list/"
-          lastOid = $(".movie>div.cover").last().attr("oid")
-          if(lastOid != undefined) {
-              url+=lastOid
-          }
-          type = $(".menu>a[class='list-group-item active']").attr("data")
-          if(type != undefined){
-              url+="?type="+type
-          }
-          $.get(url,function(content,status){
-              if (status != "success") {
-                  return 
-              }
-              $("div.movie-content").append(content)
-              $("#hid_isload").attr("value", "0")
-          })
-          console.log(lastOid)
+            url = "/list/"
+            lastOid = $(".movie>div.cover").last().attr("oid")
+            if(lastOid != undefined) {
+                url+=lastOid
+            }
+            type = $(".menu>a[class='list-group-item active']").attr("data")
+            if(type != undefined){
+                url+="?type="+type
+            }
+            keyword = $("#search").val()
+            if(keyword != ""){
+                url+="?keyword="+keyword
+            }
+            $.get(url,function(content,status){
+                if (status != "success") {
+                    return 
+                }
+                $("div.movie-content").append(content)
+                $("#hid_isload").attr("value", "0")
+            })
+            console.log(lastOid)
       }
   </script>
 </html>

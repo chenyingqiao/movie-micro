@@ -13,6 +13,7 @@ import (
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -208,4 +209,25 @@ func (m *Movie) DeleteByHash(hash string) (bool, error) {
 	}
 	return true, nil
 
+}
+
+//Watch 监听movie集合的变化
+func (m *Movie) Watch(handler func(movie bson.M)) error {
+	col, err := utils.GetMongoDb(utils.MongoCol)
+	if err != nil {
+		return errors.Wrap(err, "mongodb 错误")
+	}
+
+	stream, err := col.Watch(context.TODO(), mongo.Pipeline{})
+	if err != nil {
+		return errors.Wrap(err, "mongodb 错误")
+	}
+	for stream.Next(context.TODO()) {
+		var data bson.M
+		if err := stream.Decode(&data); err != nil {
+			panic("mongodb watch任务解析错误")
+		}
+		handler(data)
+	}
+	return nil
 }

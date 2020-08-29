@@ -11,8 +11,6 @@ import (
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 //MovieService 电影服务
@@ -86,10 +84,38 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 
 //Search 查找电影
 func (*MovieService) Search(request *protos.MovieSearchRequest, searchServer protos.Movie_SearchServer) error {
-
-	// movie := db.NewMovie()
-
-	return status.Errorf(codes.Unimplemented, "method Search not implemented")
+	movie := db.NewMovie()
+	var err error
+	var objID primitive.ObjectID
+	if request.GetObjId() != "" {
+		objID, err = primitive.ObjectIDFromHex(request.GetObjId())
+		if err != nil {
+			objID = primitive.NewObjectIDFromTimestamp(time.Now().Add(3600 * time.Second))
+		}
+	} else {
+		objID = primitive.NewObjectIDFromTimestamp(time.Now().Add(3600 * time.Second))
+	}
+	filter := bson.M{
+		"_id": bson.M{
+			"$lt": objID,
+		},
+		"title": bson.M{
+			"$regex": primitive.Regex{
+				Pattern: request.GetKeyword(),
+				Options: "i",
+			},
+		},
+	}
+	sort := bson.M{
+		"_id": -1,
+	}
+	movies, err := movie.GetPageData(filter, sort, 60)
+	for _, v := range movies {
+		movieResponse := &protos.MovieResponse{}
+		v.FillObj(movieResponse)
+		searchServer.Send(movieResponse)
+	}
+	return err
 }
 
 //Delete 删除电影

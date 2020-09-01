@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  movie
+  labels:
+    app: movie
+spec:
+  selector:
+    app: movie
+  ports:
+  - name:  movie
+    port:  80
+    targetPort:  movie

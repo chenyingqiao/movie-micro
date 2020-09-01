@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  server
+  labels:
+    app: server
+spec:
+  selector:
+    app:  server
+  ports:
+  - name:  server
+    port:  30059
+    targetPort:  30059

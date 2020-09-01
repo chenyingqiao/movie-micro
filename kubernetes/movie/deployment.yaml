@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  movie
+  labels:
+    app:  movie
+spec:
+  replicas: 1 #三个实例
+  selector:
+    matchLabels:
+      app: movie
+  template:
+    metadata:
+      labels:
+        app: movie
+    spec:
+      restartPolicy: Always
+      containers:
+      - name:  movie
+        image: movie:latest
+        imagePullPolicy: Never
+        resources: {}
+        envFrom:
+          - configMapRef:
+              name: mongodb    
+        ports:
+        - containerPort:  80
+          name:  movie

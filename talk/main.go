@@ -15,5 +15,5 @@ func main() {
 	router := gin.New()
 	router.Use(middle.Cors)
 	controller.RegisterController(router, controller.NewRoomController())
-	router.Run(":8084")
+	router.Run(":80")
 }

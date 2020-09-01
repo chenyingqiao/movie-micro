@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -26,6 +27,7 @@ func (m *MovieService) Detail(ctx context.Context, movieRequest *protos.MovieReq
 	}
 	movieResponse := &protos.MovieResponse{}
 	movieInfo.FillObj(movieResponse)
+	logrus.WithField("info", movieRequest).Info("电影详细信息")
 	return movieResponse, nil
 }
 
@@ -47,12 +49,12 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 		"_id": bson.M{
 			"$lt": objID,
 		},
-		// "types": bson.M{
-		// 	"$nin": bson.A{
-		// 		"福利片",
-		// 		"伦理片",
-		// 	},
-		// },
+		"types": bson.M{
+			"$nin": bson.A{
+				"福利片",
+				"伦理片",
+			},
+		},
 	}
 	if types == "ALL" {
 		filter = bson.M{
@@ -79,6 +81,7 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 		v.FillObj(movieResponse)
 		movieListServer.Send(movieResponse)
 	}
+	logrus.WithField("info", movieRequest).Info("电影列表")
 	return err
 }
 
@@ -115,6 +118,8 @@ func (*MovieService) Search(request *protos.MovieSearchRequest, searchServer pro
 		v.FillObj(movieResponse)
 		searchServer.Send(movieResponse)
 	}
+
+	logrus.WithField("info", request).Info("查找电影")
 	return err
 }
 

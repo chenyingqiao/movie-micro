@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"os"
 	"sync"
 
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
@@ -15,7 +14,7 @@ var (
 
 	grpcClientConnect = map[string]*grpc.ClientConn{}
 	grpcClientMap     = map[string]string{
-		"AUTH": os.Getenv("ATUH_SERVICE_HOST") + ":" + os.Getenv("ATUH_SERVICE_PORT"),
+		"AUTH": "auth:50060",
 	}
 	lock = sync.Mutex{}
 )

@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  auth
+spec:
+  selector:
+    app:  auth
+  ports:
+  - name:  auth
+    port:  50060
+    targetPort:  auth

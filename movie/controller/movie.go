@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 //MovieController 电影信息控制器
@@ -52,6 +53,7 @@ func (m *MovieController) detail(c *gin.Context) {
 	}
 	response, err := m.movieRPCClient.Detail(request)
 	if errs.ValidataGrpcErrorError(err) {
+		logrus.WithField("err", err).Info("获取错误")
 		c.JSON(http.StatusOK, utils.JSONResult(err.Error(), nil, 200))
 		return
 	}
@@ -119,6 +121,7 @@ func (m *MovieController) list(c *gin.Context) {
 	}
 
 	if err != nil || len(response) == 0 {
+		logrus.WithField("err", err).Info("获取错误")
 		c.HTML(http.StatusInternalServerError, "/tmpl/list.html", map[string]interface{}{
 			"data":      response,
 			"last_hash": nil,

@@ -13,8 +13,8 @@
             "env": {
                 "MONGODB_USERNAME":"root",
                 "MONGODB_PWD":"root",
-                "MONGODB_ADDR":"10.100.175.216:27017",
-                "MONGODB_DB":"test",
+                "MONGODB_ADDR":"10.108.195.155:27017",
+                "MONGODB_DB":"movie",
                 "MONGODB_TIMEOUT":"10",
                 "MONGODB_POOLSIZE":"30",
             },
@@ -32,8 +32,8 @@
             "env": {
                 "MONGODB_USERNAME":"root",
                 "MONGODB_PWD":"root",
-                "MONGODB_ADDR":"10.100.175.216:27017",
-                "MONGODB_DB":"test",
+                "MONGODB_ADDR":"10.108.195.155:27017",
+                "MONGODB_DB":"movie",
                 "MONGODB_TIMEOUT":"10",
                 "MONGODB_POOLSIZE":"30",
             },
@@ -54,8 +54,8 @@
             "env": {
                 "MONGODB_USERNAME":"root",
                 "MONGODB_PWD":"root",
-                "MONGODB_ADDR":"10.100.175.216:27017",
-                "MONGODB_DB":"test",
+                "MONGODB_ADDR":"10.108.195.155:27017",
+                "MONGODB_DB":"movie",
                 "MONGODB_TIMEOUT":"10",
                 "MONGODB_POOLSIZE":"30",
             },

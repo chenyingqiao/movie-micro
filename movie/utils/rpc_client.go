@@ -1,11 +1,11 @@
 package utils
 
 import (
-	"os"
 	"sync"
 
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/connectivity"
 )
 
 var (
@@ -16,8 +16,8 @@ var (
 
 	grpcClientConnect = map[string]*grpc.ClientConn{}
 	grpcClientMap     = map[string]string{
-		"AUTH":  os.Getenv("ATUH_SERVICE_HOST") + ":" + os.Getenv("ATUH_SERVICE_PORT"),
-		"MOVIE": os.Getenv("MOVIE_SERVICE_HOST") + ":" + os.Getenv("MOVIE_SERVICE_PORT"),
+		"AUTH":  "auth:50060",
+		"MOVIE": "server:50059",
 	}
 	lock = sync.Mutex{}
 )
@@ -25,7 +25,10 @@ var (
 //OpenGrpcClientConnect 打开grpc链接，不重复开启链接
 func OpenGrpcClientConnect(flag string) (*grpc.ClientConn, error) {
 	if _, ok := grpcClientConnect[flag]; ok {
-		return grpcClientConnect[flag], nil
+		conn := grpcClientConnect[flag]
+		if conn.GetState() == connectivity.Ready {
+			return grpcClientConnect[flag], nil
+		}
 	}
 	lock.Lock()
 	defer lock.Unlock()

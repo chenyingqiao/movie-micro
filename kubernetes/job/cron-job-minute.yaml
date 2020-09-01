@@ -1,0 +1,20 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: crawler-minute
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: crawler-minute
+            image: movie-job
+            imagePullPolicy: Never
+            command: ["./minute_job"]
+            envFrom:
+            - configMapRef:
+                name: mongodb

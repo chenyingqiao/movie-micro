@@ -12,6 +12,7 @@ import (
 	"talk/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type RoomController struct{}
@@ -48,6 +49,7 @@ func (rc *RoomController) message(c *gin.Context) {
 	authLogic := logic.NewAuthLogic()
 	userInfo, err := authLogic.GetUserInfo(jwt)
 	if err != nil {
+		logrus.WithField("err", err).Info("用户信息获取失败")
 		c.JSON(http.StatusOK, utils.JSONResult("用户信息获取失败", nil, 500))
 	}
 	username := userInfo.Info.Username
@@ -69,6 +71,7 @@ func (rc *RoomController) estream(c *gin.Context) {
 	authLogic := logic.NewAuthLogic()
 	userInfo, err := authLogic.GetUserInfo(jwt)
 	if err != nil {
+		logrus.WithField("err", err).Info("用户信息获取失败")
 		c.JSON(http.StatusOK, utils.JSONResult("用户信息获取失败", nil, 500))
 	}
 	username := userInfo.Info.Username

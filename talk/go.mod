@@ -9,6 +9,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.1
 	github.com/grpc-ecosystem/grpc-gateway v1.14.7
 	github.com/pkg/errors v0.9.1
+	github.com/sirupsen/logrus v1.4.2
 	go.mongodb.org/mongo-driver v1.4.0
 	google.golang.org/genproto v0.0.0-20200825200019-8632dd797987
 	google.golang.org/grpc v1.31.1

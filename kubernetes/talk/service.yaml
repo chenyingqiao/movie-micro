@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  talk
+spec:
+  selector:
+    name:  talk
+  ports:
+  - name:  talk
+    port:  80
+    targetPort:  talk

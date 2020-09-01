@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  talk
+  labels:
+    name:  talk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: talk
+  template:
+    metadata:
+      labels:
+        name: talk
+    spec:
+      restartPolicy: Always
+      containers:
+      - name:  talk
+        image: talk:latest
+        imagePullPolicy: Never
+        resources: {}
+        envFrom:
+          - configMapRef:
+              name: mongodb    
+        ports:
+        - containerPort:  80
+          name:  talk

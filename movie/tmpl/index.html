@@ -195,7 +195,7 @@
             }
             keyword = $("#search").val()
             if(keyword != ""){
-                url+="?keyword="+keyword
+                url="/list/?keyword="+keyword
             }
             $.get(url,function(content,status){
                 if (status != "success") {

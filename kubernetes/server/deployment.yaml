@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  server
+  labels:
+    name:  server
+spec:
+  replicas: 3 #三个实例
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      restartPolicy: Always
+      containers:
+        - name:  server
+          image: server:latest
+          imagePullPolicy: Never
+          resources: {}
+          envFrom:
+            - configMapRef:
+                name: mongodb
+          ports:
+          - containerPort:  30059
+            name:  server

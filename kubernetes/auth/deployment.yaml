@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  auth
+  labels:
+    app:  auth
+spec:
+  replicas: 3 #三个实例
+  selector:
+    matchLabels:
+      name: auth
+  template:
+    metadata:
+      labels:
+        name: auth
+    spec:
+      restartPolicy: Always
+      containers:
+        - name:  auth
+          image: auth:latest
+          imagePullPolicy: Never
+          resources: {}
+          envFrom:
+            - configMapRef:
+                name: mongodb
+          ports:
+          - containerPort:  50060
+            name:  auth

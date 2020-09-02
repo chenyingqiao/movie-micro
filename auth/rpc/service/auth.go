@@ -7,6 +7,7 @@ import (
 	"context"
 	"strings"
 
+	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -41,6 +42,7 @@ func (auth *AuthService) GetToken(ctx context.Context, tokenRequest *protos.Toke
 	response := &protos.TokenResponse{
 		Token: token,
 	}
+	logrus.WithField("info", tokenRequest).Info("获取token")
 
 	return response, nil
 }
@@ -78,6 +80,8 @@ func (auth *AuthService) GetInfo(ctx context.Context, getInfoRequest *protos.Get
 		},
 		Code: 200,
 	}
+
+	logrus.WithField("info", getInfoRequest).Info("获取用户信息")
 
 	return response, nil
 }

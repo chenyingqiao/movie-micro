@@ -1,0 +1,52 @@
+#video-panel{
+    background-color: black;
+}
+#choose{
+    overflow-y:auto;
+    height: 100%;
+}
+#choose>img{
+    margin:0px auto;
+    height: 150px;
+}
+#choose>div{
+    word-break:break-all;
+    font-size: 0.7rem;
+}
+body::-webkit-scrollbar{
+        display: none; /* Chrome Safari */
+}
+body{
+    scrollbar-width: none; /* firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.my{
+    background-color: lightseagreen;
+    text-align: right;
+}
+.list-group-item{
+    padding: 3px;
+}
+.list-group-item > span{
+    color:rgb(243, 31, 12);
+}
+#talk>input{
+    position:relative;
+    height: 25px;
+    width: 300px;
+}
+
+#comment_p{overflow-y: auto;}
+#message_text{font-size: 0.55rem;}
+.form-inline center{
+    margin:0px auto;
+    width:300px;
+}
+.form-group label{
+    width:120px;
+}
+.talk{
+    font-size:0.55rem;
+}

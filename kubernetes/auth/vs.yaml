@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: auth
+spec:
+  hosts:
+  - auth
+  http:
+  - route:
+    - destination:
+        host: auth
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: auth
+spec:
+  host: auth
+  trafficPolicy:
+    loadBalancer:
+      simple: RANDOM

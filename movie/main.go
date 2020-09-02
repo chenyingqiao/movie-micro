@@ -45,5 +45,5 @@ func loadTemplate() (*template.Template, error) {
 }
 
 func loadStatic(r *gin.Engine) {
-	r.Static("/video-js", "./static/video-js")
+	r.Static("/static", "./static/")
 }

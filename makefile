@@ -12,6 +12,7 @@ build:
 	@cd ./crawler && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build  -a -tags netgo -ldflags '-w' -o ../kubernetes/job/minute_job ./daemon/cmd/minute/main.go
 	
 	@echo "> make movie"
+	@cd ./movie && cp -r ./static ../kubernetes/movie/
 	@cd ./movie && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build  -a -tags netgo -ldflags '-w' -o ../kubernetes/movie/movie ./main.go
 
 	@echo "> make talk"

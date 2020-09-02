@@ -8,11 +8,13 @@ spec:
   replicas: 3 #三个实例
   selector:
     matchLabels:
-      name: auth
+      app: auth
+      version: v1
   template:
     metadata:
       labels:
-        name: auth
+        app: auth
+        version: v1
     spec:
       restartPolicy: Always
       containers:

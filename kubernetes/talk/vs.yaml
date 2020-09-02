@@ -1,0 +1,14 @@
+# See more at https://istio.io/docs/reference/config/networking/virtual-service/
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: talk
+spec:
+  hosts:
+  - talk
+  gateways:
+  - talk-gateway
+  http:
+  - route:
+    - destination:
+        host: talk

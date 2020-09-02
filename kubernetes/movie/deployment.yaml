@@ -9,10 +9,12 @@ spec:
   selector:
     matchLabels:
       app: movie
+      version: v1
   template:
     metadata:
       labels:
         app: movie
+        version: v1
     spec:
       restartPolicy: Always
       containers:

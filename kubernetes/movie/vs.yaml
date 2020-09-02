@@ -1,0 +1,14 @@
+# See more at https://istio.io/docs/reference/config/networking/virtual-service/
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: movie
+spec:
+  hosts:
+  - movie
+  gateways:
+  - movie-gateway
+  http:
+  - route:
+    - destination:
+        host: movie

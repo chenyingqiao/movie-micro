@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: server
+spec:
+  hosts:
+  - server
+  http:
+  - route:
+    - destination:
+        host: server
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: server
+spec:
+  host: server
+  trafficPolicy:
+    loadBalancer:
+      simple: RANDOM

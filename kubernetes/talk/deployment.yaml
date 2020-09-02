@@ -3,16 +3,19 @@ kind: Deployment
 metadata:
   name:  talk
   labels:
-    name:  talk
+    app:  talk
+    version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: talk
+      app: talk
+      version: v1
   template:
     metadata:
       labels:
-        name: talk
+        app: talk
+        version: v1
     spec:
       restartPolicy: Always
       containers:

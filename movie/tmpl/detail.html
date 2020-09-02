@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico" />
     <title>{{.data.Title}}</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -13,6 +14,7 @@
     <script src="/static/video-js/videojs-contrib-hls.min.js"></script>
     <script>
         videojs.options.flash.swf = "video-js/video-js.swf"
+        var movieHash = "{{.data.Hash}}"
     </script>
     <link rel="stylesheet" href="/static/css/detail.css">
   </head>

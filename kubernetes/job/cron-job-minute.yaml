@@ -3,15 +3,19 @@ kind: CronJob
 metadata:
   name: crawler-minute
 spec:
-  schedule: "*/15 * * * *"
+  schedule: "*/5 * * * *"
   concurrencyPolicy: Forbid
-  successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 60
   jobTemplate:
     spec:
       template:
+        metadata:
+          annotations:
+            # 在批量任务中不使用sidecar
+            sidecar.istio.io/inject: "false"
         spec:
-          restartPolicy: OnFailure
+          restartPolicy: Never
           containers:
           - name: crawler-minute
             image: movie-job

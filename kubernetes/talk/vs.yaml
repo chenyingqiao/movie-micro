@@ -5,7 +5,7 @@ metadata:
   name: talk
 spec:
   hosts:
-  - talk
+  - "talk.chenyingqiao.com"
   gateways:
   - talk-gateway
   http:

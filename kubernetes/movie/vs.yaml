@@ -5,7 +5,7 @@ metadata:
   name: movie
 spec:
   hosts:
-  - movie
+  - "movie.chenyingqiao.com"
   gateways:
   - movie-gateway
   http:

@@ -53,11 +53,11 @@ function load(){
     url += "?"
     keyword = $("#search").val()
     if(keyword != ""){
-        url+="keyword="+keyword
+        url+="keyword="+keyword+"&"
     }
     type = $(".menu>a[class='list-group-item active']").attr("data")
     if(type != undefined){
-        url+="type="+type
+        url+="type="+type+"&"
     }
     $.get(url,function(content,status){
         if (status != "success") {

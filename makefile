@@ -2,44 +2,44 @@ GOCMD=go
 
 define reload_server
 	@echo "====================server===================="
-	@cd kubernetes/server && sudo kubectl delete -f deployment.yaml -n movie
-	@sudo docker rmi -f server
-	@cd kubernetes/server && sudo docker build -t server .
-	@cd kubernetes/server && sudo kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/server && kubectl delete -f deployment.yaml -n movie
+	@docker rmi -f server
+	@cd kubernetes/server && docker build -t server .
+	@cd kubernetes/server && kubectl create -f deployment.yaml -n movie
 endef
 
 define reload_auth
 	@echo "====================auth===================="
-	@cd kubernetes/auth && sudo kubectl delete -f deployment.yaml -n movie
-	@sudo docker rmi -f auth
-	@cd kubernetes/auth && sudo docker build -t auth .
-	@cd kubernetes/auth && sudo kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/auth && kubectl delete -f deployment.yaml -n movie
+	@docker rmi -f auth
+	@cd kubernetes/auth && docker build -t auth .
+	@cd kubernetes/auth && kubectl create -f deployment.yaml -n movie
 endef
 
 define reload_talk
 	@echo "====================talk===================="
-	@cd kubernetes/talk && sudo kubectl delete -f deployment.yaml -n movie
-	@sudo docker rmi -f talk
-	@cd kubernetes/talk && sudo docker build -t talk .
-	@cd kubernetes/talk && sudo kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/talk && kubectl delete -f deployment.yaml -n movie
+	@docker rmi -f talk
+	@cd kubernetes/talk && docker build -t talk .
+	@cd kubernetes/talk && kubectl create -f deployment.yaml -n movie
 endef
 
 define reload_movie
 	@echo "====================movie===================="
-	@cd kubernetes/movie && sudo kubectl delete -f deployment.yaml -n movie
-	@sudo docker rmi -f movie
-	@cd kubernetes/movie && sudo docker build -t movie .
-	@cd kubernetes/movie && sudo kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/movie && kubectl delete -f deployment.yaml -n movie
+	@docker rmi -f movie
+	@cd kubernetes/movie && docker build -t movie .
+	@cd kubernetes/movie && kubectl create -f deployment.yaml -n movie
 endef
 
 define reload_job
 	@echo "====================job===================="
-	@cd kubernetes/job && sudo kubectl delete -f cron-job-minute.yaml -n movie
-	@cd kubernetes/job && sudo kubectl delete -f cron-job.yaml -n movie
-	@sudo docker rmi -f movie-job
-	@cd kubernetes/job && sudo docker build -t movie-job .
-	@cd kubernetes/job && sudo kubectl create -f cron-job-minute.yaml -n movie
-	@cd kubernetes/job && sudo kubectl create -f cron-job.yaml -n movie
+	@cd kubernetes/job && kubectl delete -f cron-job-minute.yaml -n movie
+	@cd kubernetes/job && kubectl delete -f cron-job.yaml -n movie
+	@docker rmi -f movie-job
+	@cd kubernetes/job && docker build -t movie-job .
+	@cd kubernetes/job && kubectl create -f cron-job-minute.yaml -n movie
+	@cd kubernetes/job && kubectl create -f cron-job.yaml -n movie
 endef
 
 
@@ -77,61 +77,53 @@ build:
 
 clean:
 
-	@sudo docker rmi -f auth
-	@sudo docker rmi -f server
-	@sudo docker rmi -f movie
-	@sudo docker rmi -f talk
-	@sudo docker rmi -f movie-job
+	@docker rmi -f auth
+	@docker rmi -f server
+	@docker rmi -f movie
+	@docker rmi -f talk
+	@docker rmi -f movie-job
 
 load:
 	@echo "====================部署===================="
 
-	@sudo docker rmi -f auth
-	@sudo docker rmi -f server
-	@sudo docker rmi -f movie
-	@sudo docker rmi -f talk
-	@sudo docker rmi -f movie-job
-
-	@echo "====================部署===================="
-
-	@sudo kubectl create ns movie
+	@kubectl create ns movie
 
 	# 设置自动注入
-	@sudo kubectl label ns movie istio-injection=enabled
+	@kubectl label ns movie istio-injection=enabled
 
-	@cd kubernetes/base-facilities/mongo && sudo kubectl create -f secret.yaml -n movie
-	@cd kubernetes/base-facilities/mongo && sudo kubectl create -f deployment.yaml -n movie
-	@cd kubernetes/base-facilities/mongo && sudo kubectl create -f service.yaml -n movie
+	@cd kubernetes/base-facilities/mongo && kubectl create -f secret.yaml -n movie
+	@cd kubernetes/base-facilities/mongo && kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/base-facilities/mongo && kubectl create -f service.yaml -n movie
 
-	@sudo kubectl create -f config.yaml -n movie
+	@kubectl create -f config.yaml -n movie
 
-	@cd kubernetes/server && sudo docker build -t server .
-	@cd kubernetes/server && sudo kubectl create -f deployment.yaml -n movie
-	@cd kubernetes/server && sudo kubectl create -f service.yaml -n movie
-	@cd kubernetes/server && sudo kubectl create -f vs.yaml -n movie
+	@cd kubernetes/server && docker build -t server .
+	@cd kubernetes/server && kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/server && kubectl create -f service.yaml -n movie
+	@cd kubernetes/server && kubectl create -f vs.yaml -n movie
 
-	@cd kubernetes/auth && sudo docker build -t auth .
-	@cd kubernetes/auth && sudo kubectl create -f deployment.yaml -n movie
-	@cd kubernetes/auth && sudo kubectl create -f service.yaml -n movie
-	@cd kubernetes/auth && sudo kubectl create -f vs.yaml -n movie
-
-
-	@cd kubernetes/talk && sudo docker build -t talk .
-	@cd kubernetes/talk && sudo kubectl create -f deployment.yaml -n movie
-	@cd kubernetes/talk && sudo kubectl create -f service.yaml -n movie
-	@cd kubernetes/talk && sudo kubectl create -f vs.yaml -n movie
-	@cd kubernetes/talk && sudo kubectl create -f gateway.yaml -n movie
+	@cd kubernetes/auth && docker build -t auth .
+	@cd kubernetes/auth && kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/auth && kubectl create -f service.yaml -n movie
+	@cd kubernetes/auth && kubectl create -f vs.yaml -n movie
 
 
-	@cd kubernetes/movie && sudo docker build -t movie .
-	@cd kubernetes/movie && sudo kubectl create -f deployment.yaml -n movie
-	@cd kubernetes/movie && sudo kubectl create -f service.yaml -n movie
-	@cd kubernetes/movie && sudo kubectl create -f vs.yaml -n movie
-	@cd kubernetes/movie && sudo kubectl create -f gateway.yaml -n movie
+	@cd kubernetes/talk && docker build -t talk .
+	@cd kubernetes/talk && kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/talk && kubectl create -f service.yaml -n movie
+	@cd kubernetes/talk && kubectl create -f vs.yaml -n movie
+	@cd kubernetes/talk && kubectl create -f gateway.yaml -n movie
 
-	@cd kubernetes/job && sudo docker build -t movie-job .
-	@cd kubernetes/job && sudo kubectl create -f cron-job-minute.yaml -n movie
-	@cd kubernetes/job && sudo kubectl create -f cron-job.yaml -n movie
+
+	@cd kubernetes/movie && docker build -t movie .
+	@cd kubernetes/movie && kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/movie && kubectl create -f service.yaml -n movie
+	@cd kubernetes/movie && kubectl create -f vs.yaml -n movie
+	@cd kubernetes/movie && kubectl create -f gateway.yaml -n movie
+
+	@cd kubernetes/job && docker build -t movie-job .
+	@cd kubernetes/job && kubectl create -f cron-job-minute.yaml -n movie
+	@cd kubernetes/job && kubectl create -f cron-job.yaml -n movie
 
 reload:
 	$(reload_server)

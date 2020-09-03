@@ -18,8 +18,8 @@ spec:
           restartPolicy: Never
           containers:
           - name: crawler-minute
-            image: movie-job
-            imagePullPolicy: Never
+            image: danding19931115/movie-micro:latest
+            imagePullPolicy: IfNotPresent
             command: ["./minute_job"]
             envFrom:
             - configMapRef:

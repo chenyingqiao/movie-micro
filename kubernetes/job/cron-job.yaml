@@ -18,8 +18,9 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: crawler
-            imagePullPolicy: Never
-            image: movie-job
+            image: danding19931115/movie-micro:latest
+            imagePullPolicy: IfNotPresent
+            command: ["./day_job"]
             envFrom:
             - configMapRef:
                 name: mongodb

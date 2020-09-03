@@ -19,8 +19,9 @@ spec:
       restartPolicy: Always
       containers:
         - name:  auth
-          image: auth:latest
-          imagePullPolicy: Never
+          image: danding19931115/movie-micro:latest
+          imagePullPolicy: IfNotPresent
+          command: ["./auth"]
           resources: {}
           envFrom:
             - configMapRef:

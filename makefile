@@ -37,49 +37,30 @@ build:
 	@echo "====================交叉编译===================="
 	@echo "> make auth"
 	@cd ./auth && ./generator.sh
-	@cd ./auth && $(GOCMD) mod tidy
-	@cd ./auth && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build -a -tags netgo -ldflags '-w' -o ../kubernetes/auth/auth ./server.go
+	@cd ./auth && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build -a -tags netgo -ldflags '-w' -o ../kubernetes/bin/auth ./server.go
 	
 	@echo "> make rpc_server"
 	@cd ./crawler && ./generator.sh
-	@cd ./crawler && $(GOCMD) mod tidy
-	@cd ./crawler && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/server/server ./rpc_server.go
+	@cd ./crawler && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/bin/server ./rpc_server.go
 
 	@echo "> make rpc_gateway"
-	@cd ./crawler && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/server/gateway ./gateway/server.go
+	@cd ./crawler && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/bin/gateway ./gateway/server.go
 
 	@echo "> make cronjob day"
-	@cd ./crawler && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/job/day_job ./daemon/cmd/day/main.go
+	@cd ./crawler && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/bin/day_job ./daemon/cmd/day/main.go
 
 	@echo "> make cronjob minute"
-	@cd ./crawler && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/job/minute_job ./daemon/cmd/minute/main.go
+	@cd ./crawler && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/bin/minute_job ./daemon/cmd/minute/main.go
 	
 	@echo "> make movie"
 	@cd ./movie && ./generator.sh
-	@cd ./movie && $(GOCMD) mod tidy
-	@cd ./movie && cp -r ./static ../kubernetes/movie/
-	@cd ./movie && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/movie/movie ./main.go
+	@cd ./movie && cp -r ./static ../kubernetes/
+	@cd ./movie && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/bin/movie ./main.go
 
 	@echo "> make talk"
 	@cd ./talk && ./generator.sh
-	@cd ./talk && $(GOCMD) mod tidy
-	@cd ./talk && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/talk/talk ./main.go
+	@cd ./talk && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOCMD) build  -a -tags netgo -ldflags '-w' -o ../kubernetes/bin/talk ./main.go
 
-clean-image:
-
-	@docker rmi -f auth
-	@docker rmi -f server
-	@docker rmi -f movie
-	@docker rmi -f talk
-	@docker rmi -f movie-job
-
-build-image:
-	@cd kubernetes/server && docker build -t server .
-	@cd kubernetes/auth && docker build -t auth .
-	@cd ./movie && cp -r ./static ../kubernetes/movie/
-	@cd kubernetes/movie && docker build -t movie .
-	@cd kubernetes/talk && docker build -t talk .
-	@cd kubernetes/job && docker build -t movie-job .
 
 remove-all:
 	@kubectl delete ns movie
@@ -96,7 +77,6 @@ load-base:
 	@cd kubernetes/base-facilities/mongo && kubectl create -f service.yaml -n movie
 
 	@cd kubernetes/ && kubectl create -f config.yaml -n movie
-	@echo "需要自己创建 movie user talk 三个集合"
 
 load:
 	@echo "====================部署===================="
@@ -147,8 +127,4 @@ reload-job:
 	$(reload_job)
 
 status:
-	@export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
-	@export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
-	@export TCP_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="tcp")].port}')
 	@kubectl get pods -n movie
-	@echo "INGRESS_HOST=$INGRESS_HOST, INGRESS_PORT=$INGRESS_PORT"

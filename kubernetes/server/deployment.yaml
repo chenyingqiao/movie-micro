@@ -19,8 +19,9 @@ spec:
       restartPolicy: Always
       containers:
         - name:  server
-          image: server:latest
-          imagePullPolicy: Never
+          image: danding19931115/movie-micro:latest
+          imagePullPolicy: IfNotPresent
+          command: ["./server"]
           resources: {}
           envFrom:
             - configMapRef:

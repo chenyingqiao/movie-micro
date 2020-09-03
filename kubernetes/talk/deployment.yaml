@@ -20,8 +20,9 @@ spec:
       restartPolicy: Always
       containers:
       - name:  talk
-        image: talk:latest
-        imagePullPolicy: Never
+        image: danding19931115/movie-micro:latest
+        imagePullPolicy: IfNotPresent
+        command: ["./talk"]
         resources: {}
         envFrom:
           - configMapRef:

@@ -95,7 +95,7 @@ load:
 	@cd kubernetes/base-facilities/mongo && kubectl create -f deployment.yaml -n movie
 	@cd kubernetes/base-facilities/mongo && kubectl create -f service.yaml -n movie
 
-	@kubectl create -f config.yaml -n movie
+	@cd kubernetes/ && kubectl create -f config.yaml -n movie
 
 	@cd kubernetes/server && docker build -t server .
 	@cd kubernetes/server && kubectl create -f deployment.yaml -n movie

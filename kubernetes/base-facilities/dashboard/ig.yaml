@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - dashboard.com
+    - dashboard.chenyingqiao.com
     secretName: dashboard-secret
   rules:
-  - host: "dashboard.com"
+  - host: "dashboard.chenyingqiao.com"
     http:
       paths:
       - path: /

@@ -115,6 +115,7 @@ load:
 	@cd kubernetes/talk && kubectl create -f gateway.yaml -n movie
 
 
+	@cd ./movie && cp -r ./static ../kubernetes/movie/
 	@cd kubernetes/movie && docker build -t movie .
 	@cd kubernetes/movie && kubectl create -f deployment.yaml -n movie
 	@cd kubernetes/movie && kubectl create -f service.yaml -n movie

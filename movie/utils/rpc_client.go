@@ -17,7 +17,7 @@ var (
 	grpcClientConnect = map[string]*grpc.ClientConn{}
 	grpcClientMap     = map[string]string{
 		"AUTH":  "auth:50060",
-		"MOVIE": "10.108.33.252:30059",
+		"MOVIE": "server:30059",
 	}
 	lock = sync.Mutex{}
 )

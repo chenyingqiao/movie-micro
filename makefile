@@ -84,9 +84,8 @@ build-image:
 remove-all:
 	@kubectl delete ns movie
 
-load:
-	@echo "====================部署===================="
-
+load-base:
+	@echo "====================部署基础设施===================="
 	@kubectl create ns movie
 
 	# 设置自动注入
@@ -97,6 +96,10 @@ load:
 	@cd kubernetes/base-facilities/mongo && kubectl create -f service.yaml -n movie
 
 	@cd kubernetes/ && kubectl create -f config.yaml -n movie
+	@echo "需要自己创建 movie user talk 三个集合"
+
+load:
+	@echo "====================部署===================="
 
 	@cd kubernetes/server && kubectl create -f deployment.yaml -n movie
 	@cd kubernetes/server && kubectl create -f service.yaml -n movie
@@ -144,4 +147,8 @@ reload-job:
 	$(reload_job)
 
 status:
+	@export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
+	@export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
+	@export TCP_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="tcp")].port}')
 	@kubectl get pods -n movie
+	@echo "INGRESS_HOST=$INGRESS_HOST, INGRESS_PORT=$INGRESS_PORT"

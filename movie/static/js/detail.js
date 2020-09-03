@@ -105,7 +105,8 @@ function register(){
         password:password,
         password_re:passwordRe
     },function(data){
-        if(data.code == 200 && data.status){
+        console.log(data)
+        if(data.code == 200 && data.data.status){
             alert("注册成功")
             $("#register-mode").modal("hide")
             return

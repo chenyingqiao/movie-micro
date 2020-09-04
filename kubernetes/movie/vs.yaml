@@ -9,9 +9,8 @@ spec:
   gateways:
   - movie-gateway
   http:
-  - match:
-    - uri:
-      prefix: "/"
-    route:
+  - route:
     - destination:
+        port:
+          number: 80
         host: movie

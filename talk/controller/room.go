@@ -24,11 +24,17 @@ func NewRoomController() *RoomController {
 //Register Register
 func (rc *RoomController) Register(engin *gin.Engine) {
 	engin.SetHTMLTemplate(rc.testTmpl())
+	engin.GET("/", rc.hello)
 	engin.GET("/test/:roomid", rc.test)
 	engin.POST("/room/:roomid", middle.AuthMiddle, rc.message)
 	engin.GET("/stream/:roomid", rc.estream)
 	engin.GET("/talk/:roomid/:id", rc.page)
 	engin.GET("/talk/:roomid", rc.page)
+}
+
+func (m *RoomController) hello(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"hello": "world"})
+	return
 }
 
 func (rc RoomController) test(c *gin.Context) {

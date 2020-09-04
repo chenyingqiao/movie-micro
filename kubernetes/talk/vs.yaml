@@ -9,6 +9,9 @@ spec:
   gateways:
   - talk-gateway
   http:
-  - route:
+  - match:
+    - uri:
+        prefix: /
+    route:
     - destination:
         host: talk

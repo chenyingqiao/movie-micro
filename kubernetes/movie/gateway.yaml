@@ -12,3 +12,4 @@ spec:
       protocol: HTTP
     hosts:
     - "movie.chenyingqiao.com"
+    - "movie.chenyingqiao.test"

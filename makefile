@@ -101,6 +101,8 @@ load:
 	@cd kubernetes/movie && kubectl create -f vs.yaml -n movie
 	@cd kubernetes/movie && kubectl create -f gateway.yaml -n movie
 
+	@cd kubernetes/ && kubectl create -f ingress.yaml -n movie
+
 
 load-job-day:
 	@cd kubernetes/job && kubectl create -f cron-job-minute.yaml -n movie

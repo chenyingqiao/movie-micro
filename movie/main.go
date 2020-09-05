@@ -15,8 +15,7 @@ func main() {
 	defer utils.CloseAllGrpcClientConnect()
 
 	r := gin.Default()
-	t, err := loadT
-	emplate()
+	t, err := loadTemplate()
 	if err != nil {
 		fmt.Println("模板文件载入失败")
 	}

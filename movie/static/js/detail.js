@@ -55,9 +55,9 @@ $(document).ready(function(){
 
 function loadComment(){
     if($("#lastID").attr('data') == ""){
-        url = "http://talk.chenyingqiao.com/talk/"+movieHash
+        url = "http://talk.chenyingqiao.top/talk/"+movieHash
     }else{
-        url = "http://talk.chenyingqiao.com/talk/"+movieHash+"/"+$("#lastID").attr('data')
+        url = "http://talk.chenyingqiao.top/talk/"+movieHash+"/"+$("#lastID").attr('data')
     }
     $.get(url,function(data){
         append = ""
@@ -151,7 +151,7 @@ function talk(msg){
     }
     $.ajax({
         type:"POST",
-        url:"http://talk.chenyingqiao.com/room/"+movieHash,
+        url:"http://talk.chenyingqiao.top/room/"+movieHash,
         data:{
             message:msg
         },
@@ -166,7 +166,7 @@ function talk(msg){
 
 function recv(){
     if (!!window.EventSource) {
-        var source = new EventSource('http://talk.chenyingqiao.com/stream/'+movieHash+'?token='+localStorage.getItem("token"));
+        var source = new EventSource('http://talk.chenyingqiao.top/stream/'+movieHash+'?token='+localStorage.getItem("token"));
         source.addEventListener('message', function(e) {
             console.log(e.data)
             eventComment = JSON.parse(e.data)

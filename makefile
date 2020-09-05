@@ -104,10 +104,10 @@ load:
 	@cd kubernetes/ && kubectl create -f ingress.yaml -n movie
 
 
-load-job-day:
+load-job-minute:
 	@cd kubernetes/job && kubectl create -f cron-job-minute.yaml -n movie
 
-load-job-minute:
+load-job-day:
 	@cd kubernetes/job && kubectl create -f cron-job.yaml -n movie
 
 reload:

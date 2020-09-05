@@ -11,5 +11,5 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "movie.chenyingqiao.com"
-    - "movie.chenyingqiao.test"
+    - "movie.chenyingqiao.top"
+    - "movie.lerko.cn"

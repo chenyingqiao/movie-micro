@@ -12,5 +12,5 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - 'talk.chenyingqiao.com'
-    - 'talk.chenyingqiao.test'
+    - 'talk.chenyingqiao.top'
+    - 'movie.lerko.cn'

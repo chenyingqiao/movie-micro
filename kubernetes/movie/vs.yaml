@@ -5,7 +5,8 @@ metadata:
   name: movie
 spec:
   hosts:
-  - "movie.chenyingqiao.com"
+  - "movie.chenyingqiao.top"
+  - "movie.lerko.cn"
   gateways:
   - movie-gateway
   http:

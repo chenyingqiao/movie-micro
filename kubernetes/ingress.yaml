@@ -12,14 +12,42 @@ metadata:
 spec:
   ingressClassName: istio
   rules:
-  - host: movie.chenyingqiao.com
+  - host: movie.chenyingqiao.top
     http:
       paths:
       - path: /
         backend:
           serviceName: movie
           servicePort: 80
-  - host: talk.chenyingqiao.com
+  - host: talk.chenyingqiao.top
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: talk
+          servicePort: 80
+  - host: movie.chenyingqiao.top
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: movie
+          servicePort: 80
+  - host: talk.chenyingqiao.top
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: talk
+          servicePort: 80
+  - host: movie.lerko.cn
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: movie
+          servicePort: 80
+  - host: talk.lerko.cn
     http:
       paths:
       - path: /

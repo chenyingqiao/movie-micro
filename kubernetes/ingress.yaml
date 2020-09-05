@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: istio
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  name: httpbin-ingress
+spec:
+  rules:
+  - host: movie.chenyingqiao.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: movie
+          servicePort: 80
+  - host: talk.chenyingqiao.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: talk
+          servicePort: 80

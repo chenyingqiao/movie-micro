@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo
   labels:
     app: mongo
+  name: mongo
 spec:
   replicas: 1
   selector:
@@ -15,20 +15,20 @@ spec:
         app: mongo
     spec:
       containers:
-        - name: mongo
-          image: mongo
-          env:
+        - env:
             - name: MONGO_INITDB_ROOT_USERNAME
               value: root
           envFrom:
             - secretRef:
                 name: mongo
+          image: mongo
+          name: mongo
           resources: {}
           volumeMounts:
             - mountPath: /data/db
               name: mongo
       restartPolicy: Always
       volumes:
-        - name: mongo
-          hostPath:
+        - hostPath:
             path: /var/k8s/volumes/default/mongo
+          name: mongo

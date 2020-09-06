@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  talk
   labels:
-    app:  talk
+    app: talk
     version: v1
+  name: talk
 spec:
   replicas: 1
   selector:
@@ -17,16 +17,17 @@ spec:
         app: talk
         version: v1
     spec:
-      restartPolicy: Always
       containers:
-      - name:  talk
-        image: danding19931115/movie-micro:latest
-        imagePullPolicy: IfNotPresent
-        command: ["./talk"]
-        resources: {}
-        envFrom:
-          - configMapRef:
-              name: mongodb    
-        ports:
-        - containerPort:  80
-          name:  talk
+        - command:
+            - ./talk
+          envFrom:
+            - configMapRef:
+                name: mongodb
+          image: 'danding19931115/movie-micro:latest'
+          imagePullPolicy: IfNotPresent
+          name: talk
+          ports:
+            - containerPort: 80
+              name: talk
+          resources: {}
+      restartPolicy: Always

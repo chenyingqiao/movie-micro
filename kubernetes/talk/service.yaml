@@ -1,13 +1,13 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  name:  talk
   labels:
-    app:  talk
+    app: talk
+  name: talk
 spec:
-  selector:
-    app:  talk
   ports:
-  - name:  talk
-    port:  80
-    targetPort:  talk
+    - name: talk
+      port: 80
+      targetPort: talk
+  selector:
+    app: talk

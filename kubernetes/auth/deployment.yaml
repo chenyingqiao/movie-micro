@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  auth
   labels:
-    app:  auth
+    app: auth
+  name: auth
 spec:
-  replicas: 3 #三个实例
+  replicas: 3
   selector:
     matchLabels:
       app: auth
@@ -16,16 +16,17 @@ spec:
         app: auth
         version: v1
     spec:
-      restartPolicy: Always
       containers:
-        - name:  auth
-          image: danding19931115/movie-micro:latest
-          imagePullPolicy: IfNotPresent
-          command: ["./auth"]
-          resources: {}
+        - command:
+            - ./auth
           envFrom:
             - configMapRef:
                 name: mongodb
+          image: 'danding19931115/movie-micro:latest'
+          imagePullPolicy: IfNotPresent
+          name: auth
           ports:
-          - containerPort:  50060
-            name:  auth
+            - containerPort: 50060
+              name: auth
+          resources: {}
+      restartPolicy: Always

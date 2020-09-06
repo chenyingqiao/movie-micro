@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  server
   labels:
-    name:  server
+    name: server
+  name: server
 spec:
-  replicas: 3 #三个实例
+  replicas: 3
   selector:
     matchLabels:
       app: server
@@ -16,16 +16,17 @@ spec:
         app: server
         version: v1
     spec:
-      restartPolicy: Always
       containers:
-        - name:  server
-          image: danding19931115/movie-micro:latest
-          imagePullPolicy: IfNotPresent
-          command: ["./server"]
-          resources: {}
+        - command:
+            - ./server
           envFrom:
             - configMapRef:
                 name: mongodb
+          image: 'danding19931115/movie-micro:latest'
+          imagePullPolicy: IfNotPresent
+          name: server
           ports:
-          - containerPort:  30059
-            name:  server
+            - containerPort: 30059
+              name: server
+          resources: {}
+      restartPolicy: Always

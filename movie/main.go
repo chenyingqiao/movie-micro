@@ -23,7 +23,7 @@ func main() {
 	loadStatic(r)
 	controller.RegisterController(r, controller.NewUserCotroller())
 	controller.RegisterController(r, controller.NewMovieController())
-	r.Run(":8092")
+	r.Run(":80")
 }
 
 func loadTemplate() (*template.Template, error) {

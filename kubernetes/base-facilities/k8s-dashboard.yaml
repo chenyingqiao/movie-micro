@@ -1,0 +1,48 @@
+# k8s dashboard
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: k8s-dashboard-gateway
+  namespace: kubernetes-dashboard
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 15027
+      name: http-dashboard
+      protocol: HTTP
+    hosts:
+    - "dashboard.chenyingqiao.top"
+    - "dashboard.chenyingqiao.test"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: k8s-dashboard-vs
+  namespace: kubernetes-dashboard
+spec:
+  hosts:
+  - "dashboard.chenyingqiao.top"
+  - "dashboard.chenyingqiao.test"
+  gateways:
+  - k8s-dashboard-gateway
+  http:
+  - match:
+    - port: 15027
+    route:
+    - destination:
+        host: kubernetes-dashboard
+        port:
+          number: 80                                         
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: k8s-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  host: kiali
+  trafficPolicy:
+    tls:
+      mode: DISABLE

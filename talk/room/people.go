@@ -59,3 +59,11 @@ func (p *Message) GetUsername() string {
 func (p *Message) GetRoomId() string {
 	return p.roomID
 }
+
+//GetRoomId GetMessage
+func (p *Message) IsHeartbeat() bool {
+	if p.message == "" && p.roomID == "" && p.username == "" {
+		return true
+	}
+	return false
+}

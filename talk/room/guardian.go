@@ -1,6 +1,9 @@
 package room
 
-import "sync"
+import (
+	"sync"
+	"time"
+)
 
 var (
 	guardian *ChatGuardian
@@ -81,6 +84,18 @@ func (rb *ChatGuardian) Run() {
 				room := rb.manager.Get(message.GetRoomId())
 				room.Talk(message)
 			}
+		}
+	}()
+
+	// 20秒发送一个服务器事件，作为心跳
+	go func() {
+		for true {
+			rooms := rb.manager.GetAll()
+			message := NewMessage("", "", "")
+			for _, room := range rooms {
+				room.Talk(message)
+			}
+			time.Sleep(25 * time.Second)
 		}
 	}()
 }

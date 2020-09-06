@@ -8,7 +8,7 @@ type RoomManager interface {
 	Get(roomID string) *Room
 	//Close 关闭聊天室
 	Close(roomID string) error
-	Run()
+	GetAll() map[string]*GinRoom
 }
 
 //GinRoomManager 聊天室管理
@@ -46,4 +46,9 @@ func (r *GinRoomManager) Close(roomID string) error {
 	} else {
 		return errors.New("roomID不存在")
 	}
+}
+
+//Heartbeat 所有链接维持一个心跳
+func (r *GinRoomManager) GetAll() map[string]*GinRoom {
+	return r.rooms
 }

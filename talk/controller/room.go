@@ -99,6 +99,12 @@ func (rc *RoomController) estream(c *gin.Context) {
 			return false
 		case message := <-*people.GetChan():
 			messageInfo := message.(room.Message)
+			if messageInfo.IsHeartbeat() {
+				c.SSEvent("message", gin.H{
+					"heartbeat": true,
+				})
+				return true
+			}
 			c.SSEvent("message", utils.JSONResult("success", gin.H{
 				"message": fmt.Sprintf("<span>%s</span>: %s", messageInfo.GetUsername(), messageInfo.GetMessage()),
 			}, 200))

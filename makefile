@@ -130,3 +130,9 @@ reload-job:
 
 status:
 	@kubectl get pods -n movie
+
+
+dashboard:
+	@cd kubernetes/base-facilities && kubectl apply -f k8s-dashboard.yaml
+	@cd kubernetes/base-facilities && kubectl apply -f kiali-dashboard.yaml
+	@cd kubernetes/base-facilities && kubectl apply -f ingress.yaml

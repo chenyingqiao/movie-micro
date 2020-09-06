@@ -16,6 +16,7 @@
 [http://movie.chenyingqiao.top/](http://movie.chenyingqiao.top/)
 
 ![20200906153312](http://img.chenyingqiao.top/blog/20200906153312.png)
+![20200906155459](http://img.chenyingqiao.top/blog/20200906155459.png)
 
 |  服务名称 |  作用 |
 |---|---|
@@ -37,3 +38,15 @@
 **k8s描述文件结构图**
 
 ![20200906153952](http://img.chenyingqiao.top/blog/20200906153952.png)
+
+# 快速安装项目
+
+运行 `init-system.sh`
+
+```shell
+$ ./init-system.sh
+```
+
+这将会安装 `minikube` 以及 `istio` 等环境
+
+然后运行 `make load-base`

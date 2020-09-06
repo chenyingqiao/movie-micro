@@ -166,7 +166,7 @@ function talk(msg){
 
 function recv(){
     if (!!window.EventSource) {
-        var source = new EventSource('http://talk.chenyingqiao.top:8099/stream/'+movieHash+'?token='+localStorage.getItem("token"));
+        var source = new EventSource('http://talk.chenyingqiao.top/stream/'+movieHash+'?token='+localStorage.getItem("token"));
         source.addEventListener('message', function(e) {
             console.log(e.data)
             eventComment = JSON.parse(e.data)

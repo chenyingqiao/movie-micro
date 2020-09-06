@@ -10,9 +10,25 @@ spec:
   gateways:
   - talk-gateway
   http:
-  - match:
-    - uri:
-        prefix: /
-    route:
-    - destination:
-        host: talk
+    - route:
+      - destination:
+          host: talk
+      corsPolicy:
+        allowOrigin:
+        - "*"
+        allowMethods:
+        - GET
+        - POST
+        - OPTIONS
+        allowCredentials: true
+        allowHeaders:
+        - Content-Type
+        - AccessToken
+        - X-CSRF-Token
+        - Authorization
+        - Token
+        maxAge: "48h"
+      headers:
+        response:
+          set:
+            connection: keep-alive

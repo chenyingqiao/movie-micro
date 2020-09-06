@@ -16,7 +16,7 @@
 [http://movie.chenyingqiao.top/](http://movie.chenyingqiao.top/)
 
 ![20200906153312](http://img.chenyingqiao.top/blog/20200906153312.png)
-![20200906155459](http://img.chenyingqiao.top/blog/20200906155459.png)
+![20200906212813](http://img.chenyingqiao.top/blog/20200906212813.png)
 
 |  服务名称 |  作用 |
 |---|---|

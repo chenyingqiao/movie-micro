@@ -30,13 +30,13 @@ nodes:
     name: auth
     plugin: kubernetes-deployment
     position:
-      x: 1009
+      x: 346
       y: 40
   - kind: Service
     name: auth
     plugin: kubernetes-service
     position:
-      x: 1247
+      x: 584
       y: 40
   - kind: Deployment
     name: mongo
@@ -48,72 +48,72 @@ nodes:
     name: mongo-express
     plugin: kubernetes-mongodb-deployment
     position:
-      x: 520
-      y: 40
+      x: 600
+      y: 200
   - kind: Secret
     name: mongo-express
     plugin: kubernetes-secret
     position:
-      x: 720
-      y: 240
+      x: 40
+      y: 800
   - kind: Service
     name: mongo-express
     plugin: kubernetes-service
     position:
-      x: 800
-      y: 40
+      x: 880
+      y: 200
   - kind: Secret
     name: mongo
     plugin: kubernetes-secret
     position:
-      x: 1120
-      y: 240
+      x: 440
+      y: 880
   - kind: Service
     name: mongo
     plugin: kubernetes-service
     position:
       x: 320
-      y: 40
+      y: 240
   - kind: ConfigMap
     name: mongodb
     plugin: kubernetes-config-map
     position:
       x: 480
-      y: 240
+      y: 600
   - kind: Deployment
     name: movie
-    plugin: kubernetes-deployment
-    position:
-      x: 1440
-      y: 40
-  - kind: Service
-    name: movie
-    plugin: kubernetes-service
-    position:
-      x: 1678
-      y: 40
-  - kind: Deployment
-    name: server
-    plugin: kubernetes-deployment
-    position:
-      x: 1880
-      y: 40
-  - kind: Service
-    name: server
-    plugin: kubernetes-service
-    position:
-      x: 2118
-      y: 40
-  - kind: Deployment
-    name: talk
     plugin: kubernetes-deployment
     position:
       x: 40
       y: 240
   - kind: Service
+    name: movie
+    plugin: kubernetes-service
+    position:
+      x: 278
+      y: 440
+  - kind: Deployment
+    name: server
+    plugin: kubernetes-deployment
+    position:
+      x: 480
+      y: 400
+  - kind: Service
+    name: server
+    plugin: kubernetes-service
+    position:
+      x: 718
+      y: 400
+  - kind: Deployment
+    name: talk
+    plugin: kubernetes-deployment
+    position:
+      x: 40
+      y: 440
+  - kind: Service
     name: talk
     plugin: kubernetes-service
     position:
       x: 278
-      y: 240
+      y: 640
 version: '1'

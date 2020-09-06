@@ -49,4 +49,8 @@ $ ./init-system.sh
 
 这将会安装 `minikube` 以及 `istio` 等环境
 
-然后运行 `make load-base`
+然后运行 
+```shell
+make load-base # 初始化基础设施
+make load # 部署程序
+```

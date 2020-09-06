@@ -44,7 +44,6 @@ $(document).ready(function(){
                 return
             }
             talk($('#message_text').val())
-            $("#comment_p").scrollTop($("#comment_p").prop("scrollHeight"))
             $('#message_text').val("")
         }
     });
@@ -160,6 +159,7 @@ function talk(msg){
             Authorization:localStorage.getItem("token")
         },
         success:function(data){
+            $("#comment_p").scrollTop($("#comment_p").prop("scrollHeight"))
             console.log(data)
         } 
     })

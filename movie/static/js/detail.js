@@ -47,6 +47,9 @@ $(document).ready(function(){
             $('#message_text').val("")
         }
     });
+    $("#redrect_home").click(function(){
+        window.location = "/"
+    })
     token = localStorage.getItem("token")
     if(token != null && token != ""){
         recv()
@@ -126,9 +129,15 @@ function player(width,height){
     console.log(arguments)
     var options = {
         width: width,
+        "autoplay":true,
         height: height
     }
-    playerP = videojs('live-stream', options);
+    playerP = videojs('live-stream', options ,function(){
+        this.on('ended',function(){
+            //自动播放下一个
+            $("button.active").next().trigger("click")
+       })
+    });
 
     playerP.on(['loadstart', 'play', 'playing', 'firstplay', 'pause', 'ended', 'adplay', 'adplaying', 'adfirstplay', 'adpause', 'adended', 'contentplay', 'contentplaying', 'contentfirstplay', 'contentpause', 'contentended', 'contentupdate'], function (e) {
         console.warn('VIDEOJS player event: ', e.type);

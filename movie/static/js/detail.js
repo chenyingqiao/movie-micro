@@ -44,6 +44,7 @@ $(document).ready(function(){
                 return
             }
             talk($('#message_text').val())
+            $("#comment_p").scrollTop($("#comment_p").prop("scrollHeight"))
             $('#message_text').val("")
         }
     });

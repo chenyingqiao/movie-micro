@@ -41,6 +41,8 @@
 
 # 快速安装项目
 
+> 一下步骤之作用于ubuntu系统
+
 运行 `init-system.sh`
 
 ```shell
@@ -54,3 +56,11 @@ $ ./init-system.sh
 make load-base # 初始化基础设施
 make load # 部署程序
 ```
+
+将 movie.chenyingqiao.com以及talk.chenyingqiao.com 添加到到hosts中，对应的ip可以通过
+
+```shell
+sudo kubectl get ingress -n movie
+```
+
+找到

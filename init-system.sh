@@ -2,6 +2,8 @@ echo "工作目录"$HOME
 cd $HOME
 apt update
 
+apt install git
+
 echo "安装docker"
 
 curl -fsSL https://get.docker.com | bash -s docker
@@ -29,7 +31,9 @@ echo "安装istio"
 curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.6.5 sh -
 echo 'export PATH=$HOME/istio-1.6.5/bin:$PATH' >> $HOME/.bashrc
 source $HOME/.bashrc
+cd istio-1.6.5/
 istioctl install --set profile=demo
+cd ..
 
 echo "开启ingress-controller"
 

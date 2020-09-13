@@ -31,9 +31,7 @@ echo "安装istio"
 
 curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.6.5 sh -
 echo 'export PATH=$HOME/istio-1.6.5/bin:$PATH' >> $HOME/.bashrc
-cd istio-1.6.5/
 $HOME/istio-1.6.5/bin/istioctl install --set profile=demo
-cd ..
 
 echo "开启ingress-controller"
 

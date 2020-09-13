@@ -23,6 +23,7 @@ func main() {
 	loadStatic(r)
 	controller.RegisterController(r, controller.NewUserCotroller())
 	controller.RegisterController(r, controller.NewMovieController())
+	controller.RegisterController(r, controller.NewCaptchaController())
 	r.Run(":80")
 }
 

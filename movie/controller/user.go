@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"movie/logic"
 	"movie/rpc/client"
 	"movie/rpc/protos"
 	"movie/utils"
@@ -9,6 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	captchaLogic = logic.NewCaptchaLogic()
+)
+
+//UserCotnroller 用户控制器
 type UserCotnroller struct{}
 
 //NewUserCotroller NewUserCotroller
@@ -27,6 +33,16 @@ func (u *UserCotnroller) reg(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	passwordRe := c.PostForm("password_re")
+
+	answer := c.PostForm("captcha")
+	capID := c.PostForm("cap_id")
+	capVerify := captchaLogic.Verify(capID, answer)
+	if !capVerify {
+		c.JSON(http.StatusOK, utils.JSONResult("验证码校验错误", gin.H{
+			"token": "",
+		}, 500))
+		return
+	}
 
 	userClient := client.NewUserClient()
 	response, err := userClient.Register(&protos.RegisterRequest{
@@ -60,6 +76,15 @@ func (u *UserCotnroller) login(c *gin.Context) {
 		Username: username,
 		Password: password,
 	})
+	answer := c.PostForm("captcha")
+	capID := c.PostForm("cap_id")
+	capVerify := captchaLogic.Verify(capID, answer)
+	if !capVerify {
+		c.JSON(http.StatusOK, utils.JSONResult("验证码校验错误", gin.H{
+			"token": "",
+		}, 500))
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusOK, utils.JSONResult("登录失败，请重试", gin.H{
 			"token": "",

@@ -8,9 +8,6 @@ import (
 )
 
 func main() {
-	utils.StartTrace()
-
-	defer utils.StopStrace()
 
 	crawlerOption := utils.NewCrawlerOption()
 	if crawlerOption.IsNeedShowHelp() {

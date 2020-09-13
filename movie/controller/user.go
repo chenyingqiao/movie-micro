@@ -34,8 +34,8 @@ func (u *UserCotnroller) reg(c *gin.Context) {
 	password := c.PostForm("password")
 	passwordRe := c.PostForm("password_re")
 
-	answer := c.PostForm("captcha")
-	capID := c.PostForm("cap_id")
+	answer := c.PostForm("answer")
+	capID := c.PostForm("capid")
 	capVerify := captchaLogic.Verify(capID, answer)
 	if !capVerify {
 		c.JSON(http.StatusOK, utils.JSONResult("验证码校验错误", gin.H{
@@ -76,8 +76,8 @@ func (u *UserCotnroller) login(c *gin.Context) {
 		Username: username,
 		Password: password,
 	})
-	answer := c.PostForm("captcha")
-	capID := c.PostForm("cap_id")
+	answer := c.PostForm("answer")
+	capID := c.PostForm("capid")
 	capVerify := captchaLogic.Verify(capID, answer)
 	if !capVerify {
 		c.JSON(http.StatusOK, utils.JSONResult("验证码校验错误", gin.H{

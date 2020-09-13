@@ -28,6 +28,8 @@ $(document).ready(function(){
 
     $("#register_tigger").click(function(){
         $("#register-mode").modal()
+        captcha("register")
+        return
     })
     $("#login_action").click(function(){
         login()
@@ -41,6 +43,7 @@ $(document).ready(function(){
             token = localStorage.getItem("token")
             if(token == null || token == ""){
                 $("#login-mode").modal()
+                captcha("login")
                 return
             }
             talk($('#message_text').val())
@@ -50,11 +53,26 @@ $(document).ready(function(){
     $("#redrect_home").click(function(){
         window.location = "/"
     })
+
     token = localStorage.getItem("token")
     if(token != null && token != ""){
         recv()
     }
 })
+
+
+function captcha(type){
+    $.get("/captcha",function(data){
+        console.log(data)
+        if (type == 'login'){
+            $("#login_captcha_id").val(data.data.id)
+            $("#audio_captcha_login").attr("src",data.data.base64)
+        }else{
+            $("#register_captcha_id").val(data.data.id)
+            $("#audio_captcha_register").attr("src",data.data.base64)
+        }
+    })
+}
 
 function loadComment(){
     if($("#lastID").attr('data') == ""){
@@ -78,9 +96,13 @@ function loadComment(){
 function login(){
     username = $("#username").val()
     password = $("#password").val()
+    answer = $("#login_answer").val()
+    capid = $("#login_captcha_id").val()
     $.post("/login",{
         username:username,
         password:password,
+        answer:answer,
+        capid:capid
     },function(data){
         if(data.code == 200){
             localStorage.setItem("token",data.data.token)
@@ -88,7 +110,7 @@ function login(){
             $("#login-mode").modal("hide")
             window.location.reload()
         }else{
-            alert("登录失败")
+            alert("登录失败:"+data.message)
         }
     })
 }
@@ -97,7 +119,8 @@ function register(){
     username = $("#reg_username").val()
     password = $("#reg_password").val()
     passwordRe = $("#reg_password_re").val()
-
+    answer = $("#register_answer").val()
+    capid = $("#register_captcha_id").val()
     if(password != passwordRe){
         alert("两次密码输入不同")
         return
@@ -106,7 +129,9 @@ function register(){
     $.post("/register",{
         username:username,
         password:password,
-        password_re:passwordRe
+        password_re:passwordRe,
+        answer:answer,
+        capid:capid
     },function(data){
         console.log(data)
         if(data.code == 200 && data.data.status){
@@ -114,7 +139,7 @@ function register(){
             $("#register-mode").modal("hide")
             return
         }else{
-            alert("注册失败")
+            alert("注册失败:"+data.message)
             return
         }
     })

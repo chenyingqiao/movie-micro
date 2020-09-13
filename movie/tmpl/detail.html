@@ -98,6 +98,15 @@
                         <label for="">密码:</label>
                         <input type="password" name="password" id="password" class="form-control" placeholder="" aria-describedby="helpId">
                     </div>
+                    <div class="form-group ">
+                      <label for="">验证码:</label>
+                      <input type="text" name="answer" id="login_answer" class="form-control" placeholder="" aria-describedby="helpId">
+                      <input type="hidden" name="cap_id" id="login_captcha_id">
+                  </div>
+                  <div class="form-group ">
+                    <label for=""></label>
+                    <audio controls="controls" id="audio_captcha_login" src=""/>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -133,6 +142,16 @@
                         <label for="">确认密码:</label>
                         <input type="password" name="password_re" id="reg_password_re" class="form-control" placeholder="" aria-describedby="helpId">
                     </div>
+                    <div class="form-group ">
+                        <label for="">验证码:</label>
+                        <input type="text" name="answer" id="register_answer" class="form-control" placeholder="" aria-describedby="helpId">
+                        <input type="hidden" name="cap_id" id="register_captcha_id">
+                        <br />
+                    </div>
+                  <div class="form-group ">
+                    <label for=""></label>
+                    <audio controls="controls" id="audio_captcha_register" src=""/>
+                  </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -148,7 +167,7 @@
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="/static/js/detail.js"></script>
+    <script src="/static/js/detail.js?_v=1.0.1"></script>
       
   </body>
 </html>

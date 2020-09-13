@@ -24,7 +24,7 @@ func main() {
 	controller.RegisterController(r, controller.NewUserCotroller())
 	controller.RegisterController(r, controller.NewMovieController())
 	controller.RegisterController(r, controller.NewCaptchaController())
-	r.Run(":80")
+	r.Run(":8099")
 }
 
 func loadTemplate() (*template.Template, error) {

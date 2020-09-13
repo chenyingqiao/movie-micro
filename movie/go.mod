@@ -8,7 +8,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.1
 	github.com/grpc-ecosystem/grpc-gateway v1.14.7
 	github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15
-	github.com/mojocn/base64Captcha v1.3.1 // indirect
+	github.com/mojocn/base64Captcha v1.3.1
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.4.2
 	golang.org/x/image v0.0.0-20200801110659-972c09e46d76 // indirect

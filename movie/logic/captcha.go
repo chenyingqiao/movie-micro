@@ -4,7 +4,7 @@ import "github.com/mojocn/base64Captcha"
 
 var (
 	store  = base64Captcha.DefaultMemStore
-	driver = base64Captcha.NewDriverAudio(6, "zh")
+	driver = base64Captcha.NewDriverAudio(3, "zh")
 )
 
 //CaptchaLogic 验证码校验逻辑

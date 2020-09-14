@@ -98,6 +98,27 @@ function login(){
     password = $("#password").val()
     answer = $("#login_answer").val()
     capid = $("#login_captcha_id").val()
+
+    if(username == "" || password == "" || answer == "" || capid == ""){
+        alert("请输入登录信息不要留空")
+        return
+    }
+
+    if(username.length < 5){
+        alert("用户名过短：需要5个以上字符")
+        return
+    }
+
+    if(password.length < 5){
+        alert("密码过短：需要5个以上字符")
+        return
+    }
+
+    if(/.*[\u4e00-\u9fa5]+.*$/.test(password)){
+        alert("密码不能包含中文")
+        return
+    }
+
     $.post("/login",{
         username:username,
         password:password,
@@ -111,9 +132,20 @@ function login(){
             window.location.reload()
         }else{
             alert("登录失败:"+data.message)
+            captcha("login")
         }
     })
 }
+
+function funcChina(){
+      var obj = document.form1.txtName.value;
+      if(/.*[\u4e00-\u9fa5]+.*$/.test(obj)) {
+        return false;
+      }
+    
+      return true;
+    }
+    
 
 function register(){
     username = $("#reg_username").val()
@@ -121,6 +153,28 @@ function register(){
     passwordRe = $("#reg_password_re").val()
     answer = $("#register_answer").val()
     capid = $("#register_captcha_id").val()
+
+    if(username == "" || passwordRe == "" || password == "" || answer == "" || capid == ""){
+        alert("请输入登录信息不要留空")
+        return
+    }
+
+    if(username.length < 5){
+        alert("用户名过短:需要5个以上字符")
+        return
+    }
+
+    if(password.length < 5){
+        alert("密码过短：需要5个以上字符")
+        return
+    }
+
+    if(/.*[\u4e00-\u9fa5]+.*$/.test(password)){
+        alert("密码不能包含中文")
+        return
+    }
+
+
     if(password != passwordRe){
         alert("两次密码输入不同")
         return
@@ -140,6 +194,7 @@ function register(){
             return
         }else{
             alert("注册失败:"+data.message)
+            captcha("register")
             return
         }
     })

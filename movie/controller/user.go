@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"movie/controller/params"
 	"movie/logic"
 	"movie/rpc/client"
 	"movie/rpc/protos"
@@ -8,10 +9,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 var (
 	captchaLogic = logic.NewCaptchaLogic()
+	validate     = utils.GetDefaultValidate()
 )
 
 //UserCotnroller 用户控制器
@@ -30,25 +33,38 @@ func (u *UserCotnroller) Register(engin *gin.Engine) {
 
 //Reg 注册新的用户
 func (u *UserCotnroller) reg(c *gin.Context) {
-	username := c.PostForm("username")
-	password := c.PostForm("password")
-	passwordRe := c.PostForm("password_re")
-
-	answer := c.PostForm("answer")
-	capID := c.PostForm("capid")
-	capVerify := captchaLogic.Verify(capID, answer)
-	if !capVerify {
-		c.JSON(http.StatusOK, utils.JSONResult("验证码校验错误", gin.H{
-			"token": "",
+	//参数校验
+	registerParam := params.Register{}
+	if err := c.ShouldBind(&registerParam); err != nil {
+		c.JSON(http.StatusOK, utils.JSONResult("参数错误，请确认", gin.H{
+			"status": false,
+		}, 500))
+		return
+	}
+	if err := validate.Struct(registerParam); err != nil {
+		errs := err.(validator.ValidationErrors)
+		errStr := utils.ValidateErrorsf(errs)
+		c.JSON(http.StatusOK, utils.JSONResult(errStr, gin.H{
+			"status": false,
 		}, 500))
 		return
 	}
 
+	//验证码校验
+	capVerify := captchaLogic.Verify(registerParam.Capid, registerParam.Answer)
+	if !capVerify {
+		c.JSON(http.StatusOK, utils.JSONResult("验证码校验错误", gin.H{
+			"status": false,
+		}, 500))
+		return
+	}
+
+	//调用第三方服务注册
 	userClient := client.NewUserClient()
 	response, err := userClient.Register(&protos.RegisterRequest{
-		Username:       username,
-		Password:       password,
-		PasswordRepeat: passwordRe,
+		Username:       registerParam.Username,
+		Password:       registerParam.Password,
+		PasswordRepeat: registerParam.PasswordRe,
 	})
 	if err != nil {
 		c.JSON(http.StatusOK, utils.JSONResult("注册失败", gin.H{
@@ -69,16 +85,30 @@ func (u *UserCotnroller) reg(c *gin.Context) {
 }
 
 func (u *UserCotnroller) login(c *gin.Context) {
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+	loginParam := params.Login{}
+
+	if err := c.ShouldBind(&loginParam); err != nil {
+		c.JSON(http.StatusOK, utils.JSONResult("参数错误，请确认", gin.H{
+			"token": "",
+		}, 500))
+		return
+	}
+
+	if err := validate.Struct(loginParam); err != nil {
+		errs := err.(validator.ValidationErrors)
+		errStr := utils.ValidateErrorsf(errs)
+		c.JSON(http.StatusOK, utils.JSONResult(errStr, gin.H{
+			"token": "",
+		}, 500))
+		return
+	}
+
 	userClient := client.NewUserClient()
 	response, err := userClient.GetToken(&protos.TokenRequest{
-		Username: username,
-		Password: password,
+		Username: loginParam.Username,
+		Password: loginParam.Password,
 	})
-	answer := c.PostForm("answer")
-	capID := c.PostForm("capid")
-	capVerify := captchaLogic.Verify(capID, answer)
+	capVerify := captchaLogic.Verify(loginParam.Capid, loginParam.Answer)
 	if !capVerify {
 		c.JSON(http.StatusOK, utils.JSONResult("验证码校验错误", gin.H{
 			"token": "",

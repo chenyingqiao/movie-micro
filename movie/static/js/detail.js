@@ -104,13 +104,13 @@ function login(){
         return
     }
 
-    if(username.length < 5){
-        alert("用户名过短：需要5个以上字符")
+    if(username.length < 5 || username.length > 15){
+        alert("用户名过短：需要5个以上字符,15个字符以下")
         return
     }
 
-    if(password.length < 5){
-        alert("密码过短：需要5个以上字符")
+    if(password.length < 5 || username.length > 15){
+        alert("密码过短：需要5个以上字符,15个字符以下")
         return
     }
 
@@ -159,13 +159,13 @@ function register(){
         return
     }
 
-    if(username.length < 5){
-        alert("用户名过短:需要5个以上字符")
+    if(username.length < 5 && username.length > 15){
+        alert("用户名过短:需要5个以上字符,15个字符以下")
         return
     }
 
-    if(password.length < 5){
-        alert("密码过短：需要5个以上字符")
+    if(password.length < 5 || password.length > 15){
+        alert("密码过短：需要5个以上字符,15个字符以下")
         return
     }
 

@@ -1,5 +1,5 @@
 {{range .data}}
-<div class="movie" href="/detail/{{.Hash}}">
+<div class="movie" href="/detail/{{.ID}}">
     <img src="{{.ImageURL}}" alt="" onerror="this.src='http://img.chenyingqiao.top/blog/20200824202651.png'">
     <div class="cover" oid="{{.ID}}"><span>{{.Title}}</span> </div>
 </div>
@@ -8,5 +8,5 @@ nothing
 {{end}}
 
 {{if .last_hash}}
-<a href="/list/{{.last_hash.Hash}}"></a>
+<a href="/list/{{.last_hash.ID}}"></a>
 {{end}}

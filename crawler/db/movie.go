@@ -172,6 +172,30 @@ func (m *Movie) GetPageData(filter interface{}, sort interface{}, limit int64) (
 	return movies, nil
 }
 
+//FindByID id查找
+func (m *Movie) FindByID(id string) (Movie, error) {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return NewMovie(), err
+	}
+	col, err := utils.GetMongoDb(utils.MongoCol)
+	if err != nil {
+		return NewMovie(), errors.Wrap(err, "mongodb 错误")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(utils.MongoQueryTimeout)*time.Second)
+	defer cancel()
+
+	filter := bson.M{
+		"_id": objID,
+	}
+	movie := NewMovie()
+	err = col.FindOne(ctx, filter).Decode(&movie)
+	if err != nil {
+		return NewMovie(), err
+	}
+	return movie, nil
+}
+
 //FindByHash 通过hash查找movie
 func (m *Movie) FindByHash(hash string) (Movie, error) {
 	col, err := utils.GetMongoDb(utils.MongoCol)

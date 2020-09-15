@@ -28,7 +28,7 @@ func NewMovieController() *MovieController {
 //Register 注册控制器中的方法
 func (m *MovieController) Register(engin *gin.Engine) {
 	engin.GET("/", m.index)
-	engin.GET("/detail/:hash", m.detail)
+	engin.GET("/detail/:id", m.detail)
 	engin.GET("/list/:id", m.list)
 	engin.GET("/list", m.list)
 }
@@ -44,12 +44,13 @@ func (m *MovieController) index(c *gin.Context) {
 
 //detail
 func (m *MovieController) detail(c *gin.Context) {
-	hash := c.Params.ByName("hash")
-	if hash == "" {
+	id := c.Params.ByName("id")
+	if id == "" {
 		c.JSON(http.StatusOK, utils.JSONResult("error", nil, 200))
 	}
 	request := &protos.MovieRequest{
-		Hash: hash,
+		Hash:  "",
+		ObjId: id,
 	}
 	response, err := m.movieRPCClient.Detail(request)
 	if errs.ValidataGrpcErrorError(err) {

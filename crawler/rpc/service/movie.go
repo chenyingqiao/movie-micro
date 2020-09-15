@@ -21,7 +21,7 @@ type MovieService struct {
 //Detail 电影详细信息
 func (m *MovieService) Detail(ctx context.Context, movieRequest *protos.MovieRequest) (*protos.MovieResponse, error) {
 	movie := db.NewMovie()
-	movieInfo, err := movie.FindByHash(movieRequest.GetHash())
+	movieInfo, err := movie.FindByID(movieRequest.GetObjId())
 	if err != nil {
 		return nil, errors.Wrap(err, "未找到文档")
 	}

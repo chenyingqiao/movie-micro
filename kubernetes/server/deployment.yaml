@@ -22,7 +22,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: mongodb
-          image: 'danding19931115/movie-micro:v1.1'
+          image: 'danding19931115/movie-micro:latest'
           imagePullPolicy: IfNotPresent
           name: server
           ports:

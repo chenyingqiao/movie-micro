@@ -2,26 +2,22 @@ GOCMD=go
 
 define reload_server
 	@echo "====================server===================="
-	@cd kubernetes/server && kubectl delete -f deployment.yaml -n movie
-	@cd kubernetes/server && kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/server && kubectl apply -f deployment.yaml -n movie
 endef
 
 define reload_auth
 	@echo "====================auth===================="
-	@cd kubernetes/auth && kubectl delete -f deployment.yaml -n movie
-	@cd kubernetes/auth && kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/auth && kubectl apply -f deployment.yaml -n movie
 endef
 
 define reload_talk
 	@echo "====================talk===================="
-	@cd kubernetes/talk && kubectl delete -f deployment.yaml -n movie
-	@cd kubernetes/talk && kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/talk && kubectl apply -f deployment.yaml -n movie
 endef
 
 define reload_movie
 	@echo "====================movie===================="
-	@cd kubernetes/movie && kubectl delete -f deployment.yaml -n movie
-	@cd kubernetes/movie && kubectl create -f deployment.yaml -n movie
+	@cd kubernetes/movie && kubectl apply -f deployment.yaml -n movie
 endef
 
 define reload_job

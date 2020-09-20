@@ -39,7 +39,7 @@ func TestEsSearch(t *testing.T) {
 	movie := db.NewMovie()
 
 	request := &protos.MovieSearchRequest{
-		Keyword: "袍",
+		Keyword: "中餐厅",
 		ObjId:   "2",
 	}
 	res, err := movie.EsGetPageData(request, 1)

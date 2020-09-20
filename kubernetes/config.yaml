@@ -8,6 +8,7 @@ data:
   MONGODB_TIMEOUT: '10'
   MONGODB_USERNAME: root
   ES_ADDRESS: 'elasticsearch:9200'
+  ES_TIMEOUT: '10'
 kind: ConfigMap
 metadata:
   name: mongodb

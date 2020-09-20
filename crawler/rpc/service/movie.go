@@ -6,6 +6,7 @@ import (
 	"crawler/logic"
 	"crawler/rpc/protos"
 	"crawler/utils"
+	"os"
 	"time"
 
 	"github.com/pkg/errors"
@@ -87,6 +88,15 @@ func (m *MovieService) List(movieRequest *protos.MovieRequest, movieListServer p
 
 //Search 查找电影
 func (*MovieService) Search(request *protos.MovieSearchRequest, searchServer protos.Movie_SearchServer) error {
+	host := os.Getenv("ES_ADDRESS")
+	if host == "" {
+		return mongoSearch(request, searchServer)
+	}
+	return mongoSearch(request, searchServer)
+}
+
+//mongodbSearch
+func mongoSearch(request *protos.MovieSearchRequest, searchServer protos.Movie_SearchServer) error {
 	movie := db.NewMovie()
 	var err error
 	var objID primitive.ObjectID
@@ -120,6 +130,20 @@ func (*MovieService) Search(request *protos.MovieSearchRequest, searchServer pro
 	}
 
 	logrus.WithField("info", request).Info("查找电影")
+	return err
+}
+
+//elasticsearch搜索
+func esSerach(request *protos.MovieSearchRequest, searchServer protos.Movie_SearchServer) error {
+	movie := db.NewMovie()
+	movies, err := movie.EsGetPageData(request, nil, 60)
+	for _, v := range movies {
+		movieResponse := &protos.MovieResponse{}
+		v.FillObj(movieResponse)
+		searchServer.Send(movieResponse)
+	}
+
+	logrus.WithField("info", request).Info("查找电影es")
 	return err
 }
 

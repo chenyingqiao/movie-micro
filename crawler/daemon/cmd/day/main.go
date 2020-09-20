@@ -44,6 +44,10 @@ func main() {
 					finish <- true
 					return
 				}
+				err = movie.EsInsertWhenNotExsist()
+				if err != nil {
+					fmt.Printf("%+v\n", err)
+				}
 				fmt.Println(movie.Title + "=from:" + movie.Source)
 			}
 			finish <- true //完成后通过chan通知完成

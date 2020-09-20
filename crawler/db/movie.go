@@ -19,26 +19,26 @@ import (
 
 // Movie 电影数据
 type Movie struct {
-	ID                 primitive.ObjectID `bson:"_id, omitempty"`
-	Source             string             `bson:"source"`
-	DetailURL          string             `bson:"detail_url"`
-	Title              string             `bson:"title"`
-	Alias              string             `bson:"alias"`
-	Director           string             `bson:"director"`
-	Actor              string             `bson:"actor"`
-	Types              string             `bson:"types"`
-	Location           string             `bson:"location"`
-	Language           string             `bson:"language"`
-	ShowingTime        string             `bson:"showingt_ime"`
-	Long               string             `bson:"long"`
-	UpdateTime         string             `bson:"update_time"`
-	UpdateTimeUnix     int64              `bson:"update_time_unix"`
-	Introduce          string             `bson:"introduct"`
-	VideoM3U8Source    []string           `bson:"video_m3u8_source"`
-	VideoZuidallSource []string           `bson:"video_zuidall_source"`
-	VideoMp4Source     []string           `bson:"video_map_source"`
-	ImageURL           string             `bson:"image_url"`
-	Hash               string             `bson:"hash"`
+	ID                 primitive.ObjectID `bson:"_id, omitempty" json:"id"`
+	Source             string             `bson:"source"  json:"source"`
+	DetailURL          string             `bson:"detail_url"  json:"detail_url"`
+	Title              string             `bson:"title"  json:"title"`
+	Alias              string             `bson:"alias"  json:"alias"`
+	Director           string             `bson:"director"  json:"director"`
+	Actor              string             `bson:"actor"  json:"actor"`
+	Types              string             `bson:"types"  json:"types"`
+	Location           string             `bson:"location"  json:"location"`
+	Language           string             `bson:"language"  json:"language"`
+	ShowingTime        string             `bson:"showingt_ime"  json:"showingt_ime"`
+	Long               string             `bson:"long"  json:"long"`
+	UpdateTime         string             `bson:"update_time"  json:"update_time"`
+	UpdateTimeUnix     int64              `bson:"update_time_unix"  json:"update_time_unix"`
+	Introduce          string             `bson:"introduct"  json:"introduct"`
+	VideoM3U8Source    []string           `bson:"video_m3u8_source"  json:"video_m3u8_source"`
+	VideoZuidallSource []string           `bson:"video_zuidall_source"  json:"video_zuidall_source"`
+	VideoMp4Source     []string           `bson:"video_map_source"  json:"video_map_source"`
+	ImageURL           string             `bson:"image_url"  json:"image_url"`
+	Hash               string             `bson:"hash"  json:"hash"`
 }
 
 //NewMovie 实例化Movie

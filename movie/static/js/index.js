@@ -21,10 +21,17 @@
         if(event.keyCode == "13")    
         {
             $("div.movie-content").children().remove()
-            console.log($("#search").val())
             load()
         }
     })
+    setInterval(function(){
+        keyword = $("#search").val()
+        if(keyword.length >= 2 && last_keyword != keyword) {
+            last_keyword = keyword
+            $("div.movie-content").children().remove()
+            load()
+        }
+    },1000)
 });
 var jlheight = 50;             //距下边界长度/单位px
 var totalheight = 0;
@@ -32,6 +39,7 @@ var is_load = 0;
 var pages = 2;
 var n_i = 0;
 var is_search = false
+var last_keyword = ""
 $(window).scroll(function () {
     if(is_search){
         return 
@@ -42,7 +50,6 @@ $(window).scroll(function () {
     if (is_load == 0) {
         if (($(document).height() - jlheight) <= totalheight) {
             $("#hid_isload").attr("value", "1");//滚动的时候设置成1：不执行滚动
-            console.log("加载....");
             load()
         }
     }
@@ -73,5 +80,4 @@ function load(){
         $("div.movie-content").append(content)
         $("#hid_isload").attr("value", "0")
     })
-    console.log(lastOid)
 }

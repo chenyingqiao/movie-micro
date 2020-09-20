@@ -261,7 +261,7 @@ function recv(){
             console.log(e.data)
             eventComment = JSON.parse(e.data)
             if (eventComment.heartbeat == true) {
-                console.log("heartbeat")
+                // console.log("heartbeat")
             }else{
                 append = '<li class="list-group-item talk">'+eventComment.data.message+'</li>'
                 $("#comment_p").append(append)

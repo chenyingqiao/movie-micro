@@ -136,7 +136,7 @@ func mongoSearch(request *protos.MovieSearchRequest, searchServer protos.Movie_S
 //elasticsearch搜索
 func esSerach(request *protos.MovieSearchRequest, searchServer protos.Movie_SearchServer) error {
 	movie := db.NewMovie()
-	movies, err := movie.EsGetPageData(request, nil, 60)
+	movies, err := movie.EsGetPageData(request, 60)
 	for _, v := range movies {
 		movieResponse := &protos.MovieResponse{}
 		v.FillObj(movieResponse)

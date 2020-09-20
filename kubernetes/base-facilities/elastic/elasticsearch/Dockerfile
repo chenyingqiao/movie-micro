@@ -1,3 +1,5 @@
 FROM elasticsearch:7.7.0
 
-RUN elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.7.0/elasticsearch-analysis-ik-7.7.0.zip
+COPY ./elasticsearch-analysis-ik-7.7.0.zip /home/
+
+RUN sh -c '/bin/echo -e "y" | elasticsearch-plugin install file:///home/elasticsearch-analysis-ik-7.7.0.zip'

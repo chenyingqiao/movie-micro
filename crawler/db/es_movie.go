@@ -35,7 +35,7 @@ func (m *Movie) EsInsertWhenNotExsist() error {
 }
 
 //EsGetPageData 获取分页数据
-func (m *Movie) EsGetPageData(filter *protos.MovieSearchRequest, sort interface{}, limit int64) ([]Movie, error) {
+func (m *Movie) EsGetPageData(filter *protos.MovieSearchRequest, limit int64) ([]Movie, error) {
 	esClient, err := utils.GetEsConnect()
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (m *Movie) EsGetPageData(filter *protos.MovieSearchRequest, sort interface{
 	defer cancel()
 
 	boolQ := elastic.NewBoolQuery()
-	boolQ.Must(
+	boolQ.Should(
 		elastic.NewMatchQuery("title", filter.Keyword),
 		elastic.NewMatchQuery("alias", filter.Keyword),
 		elastic.NewMatchQuery("actor", filter.Keyword),
@@ -62,9 +62,11 @@ func (m *Movie) EsGetPageData(filter *protos.MovieSearchRequest, sort interface{
 		return nil, err
 	}
 
-	var movies []Movie
+	movies := []Movie{}
+	var movie **Movie
 	for _, item := range res.Each(reflect.TypeOf(&m)) {
-		movies = append(movies, item.(Movie))
+		movie = item.(**Movie)
+		movies = append(movies, **movie)
 	}
 	return movies, nil
 }

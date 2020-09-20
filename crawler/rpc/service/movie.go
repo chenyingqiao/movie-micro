@@ -92,7 +92,7 @@ func (*MovieService) Search(request *protos.MovieSearchRequest, searchServer pro
 	if host == "" {
 		return mongoSearch(request, searchServer)
 	}
-	return mongoSearch(request, searchServer)
+	return esSerach(request, searchServer)
 }
 
 //mongodbSearch

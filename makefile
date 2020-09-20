@@ -68,9 +68,16 @@ load-base:
 	# 设置自动注入
 	@kubectl label ns movie istio-injection=enabled
 
+	# 安装mongodb
 	@cd kubernetes/base-facilities/mongo && kubectl create -f secret.yaml -n movie
 	@cd kubernetes/base-facilities/mongo && kubectl create -f deployment.yaml -n movie
 	@cd kubernetes/base-facilities/mongo && kubectl create -f service.yaml -n movie
+
+	# 安装es
+	@cd kubernetes/base-facilities/elastic/elasticsearch && kubectl create -f elasticsearch-deployment.yaml -n movie
+	@cd kubernetes/base-facilities/elastic/elasticsearch && kubectl create -f elasticsearch-ingress.yaml -n movie
+	@cd kubernetes/base-facilities/elastic/elasticsearch && kubectl create -f elasticsearch-service.yaml -n movie
+
 
 	@cd kubernetes/ && kubectl create -f config.yaml -n movie
 

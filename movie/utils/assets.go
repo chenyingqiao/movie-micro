@@ -15,7 +15,7 @@ var Assets = assets.NewFileSystem(map[string][]string{"/": []string{"tmpl"}, "/t
 	"/": &assets.File{
 		Path:     "/",
 		FileMode: 0x800001ed,
-		Mtime:    time.Unix(1600170692, 1600170692647704148),
+		Mtime:    time.Unix(1600601039, 1600601039854074897),
 		Data:     nil,
 	}, "/tmpl": &assets.File{
 		Path:     "/tmpl",

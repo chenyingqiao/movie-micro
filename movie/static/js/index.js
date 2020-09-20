@@ -31,7 +31,11 @@ var totalheight = 0;
 var is_load = 0;
 var pages = 2;
 var n_i = 0;
+var is_search = false
 $(window).scroll(function () {
+    if(is_search){
+        return 
+    }
     var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
     totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
     is_load = $("#hid_isload").val();
@@ -53,7 +57,10 @@ function load(){
     url += "?"
     keyword = $("#search").val()
     if(keyword != ""){
+        is_search = true
         url+="keyword="+keyword+"&"
+    }else{
+        is_search = false
     }
     type = $(".menu>a[class='list-group-item active']").attr("data")
     if(type != undefined){

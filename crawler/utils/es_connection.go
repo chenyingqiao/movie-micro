@@ -17,6 +17,7 @@ var (
 //GetEsConnect
 func GetEsConnect() (*elastic.Client, error) {
 	var err error
+	var isLive bool
 	host := os.Getenv("ES_ADDRESS")
 	host = "http://" + host + "/"
 	timeout, err := strconv.Atoi(os.Getenv("ES_TIMEOUT"))
@@ -25,8 +26,14 @@ func GetEsConnect() (*elastic.Client, error) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 	defer cancel()
-	if esClient != nil && _, _, err = esClient.Ping(host).Do(ctx); err != nil {
+	if esClient != nil {
 		//当前连接还能使用
+		_, _, err = esClient.Ping(host).Do(ctx)
+		if err != nil {
+			isLive = true
+		}
+	}
+	if isLive {
 		return esClient, nil
 	}
 	esClient, err = elastic.NewClient(

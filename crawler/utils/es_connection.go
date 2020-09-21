@@ -29,7 +29,7 @@ func GetEsConnect() (*elastic.Client, error) {
 	if esClient != nil {
 		//当前连接还能使用
 		_, _, err = esClient.Ping(host).Do(ctx)
-		if err != nil {
+		if err == nil {
 			isLive = true
 		}
 	}

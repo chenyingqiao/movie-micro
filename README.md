@@ -8,7 +8,7 @@
 
 > 一个简单的微服务实例项目
 
-主要应用的组件有 `k8s` `istio` `mongodb`
+主要应用的组件有 `k8s` `istio` `mongodb` `elasticsearch`
 微服务通讯主要使用 `grpc` 进行通讯
 
 **Demo地址**
@@ -25,7 +25,7 @@
 | server  |  影片信息相关接口 |
 | talk  |  电影聊天室 |
 
-![20200906154235](http://img.chenyingqiao.top/blog/20200906154235.png)
+![20200921085053](http://img.chenyingqiao.top/blog/20200921085053.png)
 
 |  任务名称 |  作用 |
 |---|---|

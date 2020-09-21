@@ -16,9 +16,19 @@ var (
 
 //GetEsConnect
 func GetEsConnect() (*elastic.Client, error) {
+	var err error
 	host := os.Getenv("ES_ADDRESS")
 	host = "http://" + host + "/"
-	var err error
+	timeout, err := strconv.Atoi(os.Getenv("ES_TIMEOUT"))
+	if err != nil {
+		return nil, errors.Wrap(err, "ES_TIMEOUT_NOT_INT")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
+	defer cancel()
+	if esClient != nil && _, _, err = esClient.Ping(host).Do(ctx); err != nil {
+		//当前连接还能使用
+		return esClient, nil
+	}
 	esClient, err = elastic.NewClient(
 		elastic.SetURL(host),
 	)
@@ -26,13 +36,6 @@ func GetEsConnect() (*elastic.Client, error) {
 		return nil, errors.Wrap(err, "新建连接错误")
 	}
 
-	timeout, err := strconv.Atoi(os.Getenv("ES_TIMEOUT"))
-	if err != nil {
-		return nil, errors.Wrap(err, "ES_TIMEOUT_NOT_INT")
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
-	defer cancel()
 	_, _, err = esClient.Ping(host).Do(ctx)
 	if err != nil {
 		return nil, errors.Wrap(err, "es 无法连接")

@@ -45,10 +45,8 @@ func (m *Movie) EsGetPageData(filter *protos.MovieSearchRequest, limit int64) ([
 	defer cancel()
 
 	boolQ := elastic.NewBoolQuery()
-	boolQ.Should(
+	boolQ.Must(
 		elastic.NewMatchQuery("title", filter.Keyword),
-		elastic.NewMatchQuery("alias", filter.Keyword),
-		elastic.NewMatchQuery("actor", filter.Keyword),
 	)
 	pageNumber, err := strconv.Atoi(filter.ObjId)
 	if err != nil {

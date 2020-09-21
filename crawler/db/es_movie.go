@@ -19,7 +19,7 @@ func (m *Movie) EsInsertWhenNotExsist() error {
 	if err != nil {
 		return err
 	}
-	_, err = m.EsFindByHash(m.Hash, nil)
+	_, err = m.EsFindBySourceAndTitle(m.Title, m.Source)
 	if err == nil {
 		return nil
 	}
@@ -34,6 +34,38 @@ func (m *Movie) EsInsertWhenNotExsist() error {
 	return nil
 }
 
+//EsFindBySourceAndTitle 通过源和title找到对应电影记录
+func (m *Movie) EsFindBySourceAndTitle(title string, source string) (Movie, error) {
+	esClient, err := utils.GetEsConnect()
+	if err != nil {
+		return NewMovie(), err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10)*time.Second)
+	defer cancel()
+
+	boolQ := elastic.NewBoolQuery()
+	boolQ.Filter(
+		elastic.NewTermQuery("title.keyword", title),
+		elastic.NewTermQuery("source.keyword", source),
+	)
+	res, err := esClient.Search("movie").Type("movie").Query(boolQ).Do(ctx)
+	if err != nil {
+		return NewMovie(), errors.Wrap(err, "未找到对应文档")
+	}
+
+	var movie Movie
+	if res.Hits.TotalHits.Value > 0 {
+		err = json.Unmarshal(res.Hits.Hits[0].Source, &movie)
+		if err != nil {
+			return NewMovie(), errors.Wrap(err, "解析返回结果错误")
+		}
+		return movie, nil
+	} else {
+		return NewMovie(), errors.New("未找到电影")
+	}
+}
+
 //EsGetPageData 获取分页数据
 func (m *Movie) EsGetPageData(filter *protos.MovieSearchRequest, limit int64) ([]Movie, error) {
 	esClient, err := utils.GetEsConnect()
@@ -46,7 +78,7 @@ func (m *Movie) EsGetPageData(filter *protos.MovieSearchRequest, limit int64) ([
 
 	boolQ := elastic.NewBoolQuery()
 	boolQ.Must(
-		elastic.NewMatchQuery("title", filter.Keyword),
+		elastic.NewMatchQuery("title", filter.Keyword).Operator("AND"),
 	)
 	pageNumber, err := strconv.Atoi(filter.ObjId)
 	if err != nil {

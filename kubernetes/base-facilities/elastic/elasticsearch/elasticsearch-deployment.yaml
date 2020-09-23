@@ -19,7 +19,7 @@ spec:
           image: danding19931115/es-ik:latest
           env:
             - name: ES_JAVA_OPTS
-              value: -Xmx256m -Xms256m
+              value: -Xmx125m -Xms125m
             - name: discovery.type
               value: single-node
             - name: discovery.zen.minimum_master_nodes
